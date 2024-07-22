@@ -8,6 +8,7 @@ import * as SplashScreen from "expo-splash-screen";
 import { getAuth, onAuthStateChanged } from "firebase/auth";
 import { useEffect } from "react";
 import { ActivityIndicator, TouchableOpacity, View } from "react-native";
+import { GestureHandlerRootView } from "react-native-gesture-handler";
 import "react-native-reanimated";
 
 export { ErrorBoundary } from "expo-router";
@@ -25,7 +26,7 @@ const RootLayout = () => {
   onAuthStateChanged(auth, (user) => {
     if (user) {
       const uid = user.uid;
-      console.log("auth state: ", uid);
+      // console.log("auth state: ", uid);
     } else {
       // User is signed out
     }
@@ -89,9 +90,11 @@ const RootLayout = () => {
 
 const RootLayoutNav = () => {
   return (
-    <AuthProvider>
-      <RootLayout />
-    </AuthProvider>
+    <GestureHandlerRootView style={{ flex: 1 }}>
+      <AuthProvider>
+        <RootLayout />
+      </AuthProvider>
+    </GestureHandlerRootView>
   );
 };
 
