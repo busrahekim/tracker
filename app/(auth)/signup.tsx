@@ -5,6 +5,7 @@ import {
   TextInput,
   ActivityIndicator,
   TouchableOpacity,
+  Image,
 } from "react-native";
 import React, { useState } from "react";
 import { createUserWithEmailAndPassword, getAuth } from "firebase/auth";
@@ -20,9 +21,9 @@ const SignUp = () => {
   const router = useRouter();
 
   const handleSignUp = async () => {
-    setLoading(true); 
+    setLoading(true);
 
-    const auth = getAuth(FIREBASE_APP); 
+    const auth = getAuth(FIREBASE_APP);
     try {
       const userCredential = await createUserWithEmailAndPassword(
         auth,
@@ -42,15 +43,19 @@ const SignUp = () => {
     } catch (error) {
       console.error("Error creating user:", error);
     } finally {
-      setLoading(false); 
+      setLoading(false);
     }
   };
 
   return (
     <View className="flex-1 justify-center bg-background">
-      <Text className="mx-auto text-3xl text-primary">
-        <Text className="text-secondary font-bold text-4xl">T</Text>rackky
-      </Text>
+      <View className="flex-row items-end justify-center">
+        <Image
+          source={require("@/assets/images/t.png")}
+          className="object-cover w-20 h-20"
+        />
+        <Text className="ml-[-25px] mb-1 text-3xl text-primary">rackky</Text>
+      </View>
       <View className="mx-5 border-slate-400 border-b-2 p-5 ">
         <KeyboardAvoidingView behavior="padding">
           <TextInput

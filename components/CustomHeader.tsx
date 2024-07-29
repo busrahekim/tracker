@@ -17,7 +17,7 @@ const CustomHeader = ({ onBackPress }: CustomHeaderProps) => {
   const { top } = useSafeAreaInsets();
   return (
     <SafeAreaView>
-      <View className="relative w-full h-80">
+      <View className="relative w-full h-64">
         <Image
           className="w-full absolute h-full object-cover"
           source={require("@/assets/images/topVector2.png")}
