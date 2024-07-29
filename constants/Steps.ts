@@ -1,6 +1,16 @@
+export interface Content {
+  contentId: number;
+  title: string;
+  description: string;
+}
 
+export interface StepData {
+  id: number;
+  stepTitle: string;
+  content: Content[];
+}
 
-const Steps = [
+const Steps: StepData[] = [
   {
     id: 1,
     stepTitle: "Choose your workout plan",
@@ -35,16 +45,16 @@ const Steps = [
   },
   {
     id: 3,
-    stepTitle: "Last look",
+    stepTitle: "Choose frequency",
     content: [
       {
         contentId: 1,
-        title: "kg",
+        title: "3-days a week",
         description: "",
       },
       {
         contentId: 2,
-        title: "lbs",
+        title: "5-days a week",
         description: "",
       },
     ],
