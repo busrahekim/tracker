@@ -1,3 +1,4 @@
+import CustomHeader from "@/components/CustomHeader";
 import Colors from "@/constants/Colors";
 import { AuthProvider } from "@/context/AuthContext";
 import { Ionicons } from "@expo/vector-icons";
@@ -7,7 +8,7 @@ import { Stack, useRouter } from "expo-router";
 import * as SplashScreen from "expo-splash-screen";
 import { getAuth, onAuthStateChanged } from "firebase/auth";
 import { useEffect } from "react";
-import { ActivityIndicator, TouchableOpacity, View } from "react-native";
+import { ActivityIndicator, TouchableOpacity, View, Image } from "react-native";
 import { GestureHandlerRootView } from "react-native-gesture-handler";
 import "react-native-reanimated";
 
@@ -59,14 +60,18 @@ const RootLayout = () => {
         name="(auth)/login"
         options={{
           title: "",
-          headerBackTitle: "",
-          headerShadowVisible: false,
-          headerStyle: { backgroundColor: Colors.background },
-          headerLeft: () => (
-            <TouchableOpacity onPress={router.back}>
-              <Ionicons name="arrow-back" size={34} color={Colors.dark} />
-            </TouchableOpacity>
+          header: () => (
+            <CustomHeader onBackPress={router.back} />
           ),
+          headerTransparent: true,
+          // headerBackTitle: "",
+          // headerShadowVisible: false,
+          // headerStyle: { backgroundColor: Colors.background },
+          // headerLeft: () => (
+          //   <TouchableOpacity onPress={router.back} className="absolute">
+          //     <Ionicons name="arrow-back" size={34} color={Colors.dark} />
+          //   </TouchableOpacity>
+          // ),
         }}
       />
       <Stack.Screen
