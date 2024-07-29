@@ -31,7 +31,7 @@ const SignUp = () => {
         password
       );
       const user = userCredential.user;
-      console.log(user);
+      console.log(user.uid);
 
       // user data to Firestore
       await setDoc(doc(FIRESTORE_DB, "users", user.uid), {

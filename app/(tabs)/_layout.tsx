@@ -5,7 +5,12 @@ import { Pressable } from "react-native";
 
 import Colors from "@/constants/Colors";
 import { useColorScheme } from "@/components/useColorScheme";
-import { Ionicons, MaterialCommunityIcons } from "@expo/vector-icons";
+import {
+  Fontisto,
+  Ionicons,
+  MaterialCommunityIcons,
+  MaterialIcons,
+} from "@expo/vector-icons";
 
 // You can explore the built-in icon families and icons on the web at https://icons.expo.fyi/
 function TabBarIcon(props: {
@@ -31,11 +36,7 @@ export default function TabLayout() {
         options={{
           title: "Workout Track",
           tabBarIcon: ({ color }) => (
-            <MaterialCommunityIcons
-              name="eight-track"
-              size={24}
-              color={color}
-            />
+            <Fontisto name="date" size={24} color={color} />
           ),
           headerRight: () => (
             <Link href="/modal" asChild>
@@ -50,6 +51,28 @@ export default function TabLayout() {
                 )}
               </Pressable>
             </Link>
+          ),
+        }}
+      />
+      <Tabs.Screen
+        name="workout"
+        options={{
+          title: "Workout",
+          tabBarIcon: ({ color }) => (
+            <MaterialCommunityIcons
+              name="eight-track"
+              size={24}
+              color={color}
+            />
+          ),
+        }}
+      />
+      <Tabs.Screen
+        name="protein"
+        options={{
+          title: "Protein",
+          tabBarIcon: ({ color }) => (
+            <MaterialIcons name="set-meal" size={24} color={color} />
           ),
         }}
       />
