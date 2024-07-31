@@ -1,6 +1,7 @@
 import CustomHeader from "@/components/CustomHeader";
 import Colors from "@/constants/Colors";
 import { AuthProvider } from "@/context/AuthContext";
+import { UserInactivityProvider } from "@/context/UserInactivity";
 import { Ionicons } from "@expo/vector-icons";
 import FontAwesome from "@expo/vector-icons/FontAwesome";
 import {
@@ -112,7 +113,9 @@ const RootLayoutNav = () => {
     <ThemeProvider value={colorScheme === "dark" ? DarkTheme : DefaultTheme}>
       <GestureHandlerRootView style={{ flex: 1 }}>
         <AuthProvider>
-          <RootLayout />
+          <UserInactivityProvider>
+            <RootLayout />
+          </UserInactivityProvider>
         </AuthProvider>
       </GestureHandlerRootView>
     </ThemeProvider>
