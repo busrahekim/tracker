@@ -3,12 +3,18 @@ import Colors from "@/constants/Colors";
 import { AuthProvider } from "@/context/AuthContext";
 import { Ionicons } from "@expo/vector-icons";
 import FontAwesome from "@expo/vector-icons/FontAwesome";
+import { DarkTheme, DefaultTheme, ThemeProvider } from "@react-navigation/native";
 import { useFonts } from "expo-font";
 import { Stack, useRouter } from "expo-router";
 import * as SplashScreen from "expo-splash-screen";
 import { getAuth, onAuthStateChanged } from "firebase/auth";
 import { useEffect } from "react";
-import { ActivityIndicator, TouchableOpacity, View, Image } from "react-native";
+import {
+  ActivityIndicator,
+  TouchableOpacity,
+  View,
+  useColorScheme,
+} from "react-native";
 import { GestureHandlerRootView } from "react-native-gesture-handler";
 import "react-native-reanimated";
 
@@ -62,9 +68,7 @@ const RootLayout = () => {
         name="(auth)/login"
         options={{
           title: "",
-          header: () => (
-            <CustomHeader onBackPress={router.back} />
-          ),
+          header: () => <CustomHeader onBackPress={router.back} />,
           headerTransparent: true,
           // headerBackTitle: "",
           // headerShadowVisible: false,
@@ -96,12 +100,16 @@ const RootLayout = () => {
 };
 
 const RootLayoutNav = () => {
+  const colorScheme = useColorScheme();
+
   return (
-    <GestureHandlerRootView style={{ flex: 1 }}>
-      <AuthProvider>
-        <RootLayout />
-      </AuthProvider>
-    </GestureHandlerRootView>
+    <ThemeProvider value={colorScheme === "dark" ? DarkTheme : DefaultTheme}>
+      <GestureHandlerRootView style={{ flex: 1 }}>
+        <AuthProvider>
+          <RootLayout />
+        </AuthProvider>
+      </GestureHandlerRootView>
+    </ThemeProvider>
   );
 };
 
