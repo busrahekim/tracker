@@ -33,7 +33,6 @@ const Login = () => {
 
       const user = userCredential.user;
 
-      console.log(user);
 
       router.replace("/(tabs)/home");
     } catch (error: any) {
