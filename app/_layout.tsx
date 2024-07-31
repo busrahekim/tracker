@@ -3,7 +3,11 @@ import Colors from "@/constants/Colors";
 import { AuthProvider } from "@/context/AuthContext";
 import { Ionicons } from "@expo/vector-icons";
 import FontAwesome from "@expo/vector-icons/FontAwesome";
-import { DarkTheme, DefaultTheme, ThemeProvider } from "@react-navigation/native";
+import {
+  DarkTheme,
+  DefaultTheme,
+  ThemeProvider,
+} from "@react-navigation/native";
 import { useFonts } from "expo-font";
 import { Stack, useRouter } from "expo-router";
 import * as SplashScreen from "expo-splash-screen";
@@ -68,8 +72,8 @@ const RootLayout = () => {
         name="(auth)/login"
         options={{
           title: "",
-          header: () => <CustomHeader onBackPress={router.back} />,
-          headerTransparent: true,
+          // header: () => <CustomHeader onBackPress={router.back} />,
+          // headerTransparent: true,
           // headerBackTitle: "",
           // headerShadowVisible: false,
           // headerStyle: { backgroundColor: Colors.background },
@@ -78,20 +82,22 @@ const RootLayout = () => {
           //     <Ionicons name="arrow-back" size={34} color={Colors.dark} />
           //   </TouchableOpacity>
           // ),
+          headerShown: false,
         }}
       />
       <Stack.Screen
         name="(auth)/signup"
         options={{
           title: "",
-          headerBackTitle: "",
-          headerShadowVisible: false,
-          headerStyle: { backgroundColor: Colors.background },
-          headerLeft: () => (
-            <TouchableOpacity onPress={router.back}>
-              <Ionicons name="arrow-back" size={34} color={Colors.dark} />
-            </TouchableOpacity>
-          ),
+          // headerBackTitle: "",
+          // headerShadowVisible: false,
+          // headerStyle: { backgroundColor: Colors.background },
+          // headerLeft: () => (
+          //   <TouchableOpacity onPress={router.back}>
+          //     <Ionicons name="arrow-back" size={34} color={Colors.dark} />
+          //   </TouchableOpacity>
+          // ),
+          headerShown: false,
         }}
       />
       <Stack.Screen name="modal" options={{ presentation: "modal" }} />

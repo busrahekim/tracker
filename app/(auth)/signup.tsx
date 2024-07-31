@@ -6,6 +6,7 @@ import {
   ActivityIndicator,
   TouchableOpacity,
   Image,
+  Platform,
 } from "react-native";
 import React, { useState } from "react";
 import { createUserWithEmailAndPassword, getAuth } from "firebase/auth";
@@ -13,6 +14,8 @@ import { FIREBASE_APP, FIRESTORE_DB } from "@/firebaseConfig";
 import { doc, setDoc } from "firebase/firestore";
 import { useRouter } from "expo-router";
 import Colors from "@/constants/Colors";
+import CustomHeader from "@/components/CustomHeader";
+import { BlurView } from "expo-blur";
 
 const SignUp = () => {
   const [email, setEmail] = useState("");
@@ -49,44 +52,59 @@ const SignUp = () => {
 
   return (
     <View className="flex-1 justify-center bg-background">
-      <View className="flex-row items-end justify-center">
-        <Image
-          source={require("@/assets/images/t.png")}
-          className="object-cover w-20 h-20"
-        />
-        <Text className="ml-[-25px] mb-1 text-3xl text-primary">rackky</Text>
-      </View>
-      <View className="mx-5 border-slate-400 border-b-2 p-5 ">
-        <KeyboardAvoidingView behavior="padding">
-          <TextInput
-            className="my-1 h-12 rounded border-2 border-t-0 border-l-0 p-2 bg-white"
-            placeholder="Email"
-            autoCapitalize="none"
-            onChangeText={(text) => setEmail(text)}
-            value={email}
-          />
-          <TextInput
-            className="my-1 h-12 rounded border-2 border-t-0 border-l-0  p-2 bg-white"
-            placeholder="Password"
-            autoCapitalize="none"
-            onChangeText={(text) => setPassword(text)}
-            value={password}
-            secureTextEntry={true}
-          />
-          {loading ? (
-            <ActivityIndicator size="large" color={Colors.primary} />
-          ) : (
-            <>
-              <TouchableOpacity
-                onPress={handleSignUp}
-                className="mt-2 justify-center flex items-center bg-primary p-2 rounded"
-              >
-                <Text className="text-white leading-5">Create Account</Text>
-              </TouchableOpacity>
-            </>
-          )}
-        </KeyboardAvoidingView>
-      </View>
+      <Image
+        source={require("@/assets/images/backgroundImage.jpg")}
+        className="object-cover w-full h-full absolute"
+      />
+
+      <CustomHeader onBackPress={router.back} />
+      <BlurView intensity={50} tint="systemMaterialLight" className="mx-3">
+        <View className="py-10">
+          <View className="flex-row items-end justify-center">
+            <Image
+              source={require("@/assets/images/t.png")}
+              className="object-cover w-20 h-20"
+            />
+            <Text className="ml-[-25px] mb-1 text-3xl text-black">- RACK</Text>
+          </View>
+          <View className="mx-5 border-primary border-b-2 p-5 ">
+            <KeyboardAvoidingView
+              behavior={Platform.OS === "ios" ? "padding" : "height"}
+            >
+              <View className="space-y-2">
+                <TextInput
+                  className="rounded border-2 border-t-0 border-l-0 p-2"
+                  placeholder="Email"
+                  autoCapitalize="none"
+                  onChangeText={(text) => setEmail(text)}
+                  value={email}
+                />
+                <TextInput
+                  className="rounded border-2 border-t-0 border-l-0 p-2"
+                  placeholder="Password"
+                  autoCapitalize="none"
+                  onChangeText={(text) => setPassword(text)}
+                  value={password}
+                  secureTextEntry={true}
+                />
+              </View>
+
+              {loading ? (
+                <ActivityIndicator size="large" color={Colors.primary} />
+              ) : (
+                <>
+                  <TouchableOpacity
+                    onPress={handleSignUp}
+                    className="mt-2 justify-center flex items-center bg-black p-2 rounded"
+                  >
+                    <Text className="text-white leading-2">SIGN UP</Text>
+                  </TouchableOpacity>
+                </>
+              )}
+            </KeyboardAvoidingView>
+          </View>
+        </View>
+      </BlurView>
     </View>
   );
 };

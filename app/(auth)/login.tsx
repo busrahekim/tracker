@@ -7,19 +7,25 @@ import {
   Pressable,
   Image,
   TouchableOpacity,
+  ScrollView,
+  Platform,
 } from "react-native";
 import React, { useState } from "react";
 import { FIREBASE_APP } from "@/firebaseConfig";
 import { getAuth, signInWithEmailAndPassword } from "firebase/auth";
 import { router } from "expo-router";
 import Colors from "@/constants/Colors";
+import { BlurView } from "expo-blur";
 import { Ionicons } from "@expo/vector-icons";
+import { useSafeAreaInsets } from "react-native-safe-area-context";
 import CustomHeader from "@/components/CustomHeader";
 
 const Login = () => {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [loading, setLoading] = useState(false);
+
+  const { top } = useSafeAreaInsets();
 
   const handleLogin = async () => {
     setLoading(true);
@@ -30,9 +36,7 @@ const Login = () => {
         email,
         password
       );
-
       const user = userCredential.user;
-
 
       router.replace("/(tabs)/home");
     } catch (error: any) {
@@ -44,58 +48,74 @@ const Login = () => {
 
   return (
     <View className="flex-1 justify-center bg-background">
-      <View className="flex-row items-end justify-center">
-        <Image
-          source={require("@/assets/images/t.png")}
-          className="object-cover w-20 h-20"
-        />
-        <Text className="ml-[-25px] mb-1 text-3xl text-primary">rackky</Text>
-      </View>
+      <Image
+        source={require("@/assets/images/backgroundImage.jpg")}
+        className="object-cover w-full h-full absolute"
+      />
 
-      <View className="mx-5 border-slate-400 border-b-2 p-5 ">
-        <KeyboardAvoidingView behavior="padding">
-          <TextInput
-            className="my-1 h-12 rounded border-2 border-t-0 border-l-0 p-2 bg-white"
-            placeholder="Email"
-            autoCapitalize="none"
-            onChangeText={(text) => setEmail(text)}
-            value={email}
-          />
-          <TextInput
-            className="my-1 h-12 rounded border-2 border-t-0 border-l-0 p-2 bg-white"
-            placeholder="Password"
-            autoCapitalize="none"
-            onChangeText={(text) => setPassword(text)}
-            value={password}
-            secureTextEntry={true}
-          />
-          {loading ? (
-            <ActivityIndicator size="large" color={Colors.primary} />
-          ) : (
-            <>
-              <Pressable
-                onPress={handleLogin}
-                className="mt-2 justify-center flex items-center bg-primary p-2 rounded"
-              >
-                <Text className="text-white leading-5 -">Login</Text>
-              </Pressable>
-              <View className="flex flex-row items-center mt-4">
-                <Text className="font-semibold text-primary">
-                  Don't you have an account ?{" "}
-                </Text>
-                <Pressable
-                  onPress={() => router.navigate("/signup")}
-                  className="justify-center flex items-center"
-                >
-                  <Text className="underline text-secondary">
-                    Create account
-                  </Text>
-                </Pressable>
+      <CustomHeader onBackPress={router.back} />
+
+      <BlurView intensity={50} tint="systemMaterialLight" className="mx-3">
+        <View className="py-10">
+          <View className="flex-row items-end justify-center">
+            <Image
+              source={require("@/assets/images/t.png")}
+              className="object-cover w-20 h-20"
+            />
+            <Text className="ml-[-25px] mb-1 text-3xl text-black">- RACK</Text>
+          </View>
+
+          <View className="mx-5 border-primary border-b-2 p-5">
+            <KeyboardAvoidingView
+              behavior={Platform.OS === "ios" ? "padding" : "height"}
+            >
+              <View className="space-y-2">
+                <TextInput
+                  className="rounded border-2 border-t-0 border-l-0 p-2"
+                  placeholder="Email"
+                  autoCapitalize="none"
+                  onChangeText={(text) => setEmail(text)}
+                  value={email}
+                />
+                <TextInput
+                  className="rounded border-2 border-t-0 border-l-0 p-2"
+                  placeholder="Password"
+                  autoCapitalize="none"
+                  onChangeText={(text) => setPassword(text)}
+                  value={password}
+                  secureTextEntry={true}
+                />
               </View>
-            </>
-          )}
-        </KeyboardAvoidingView>
-      </View>
+
+              {loading ? (
+                <ActivityIndicator size="large" color={Colors.primary} />
+              ) : (
+                <>
+                  <TouchableOpacity
+                    onPress={handleLogin}
+                    className="mt-2 justify-center flex items-center bg-black p-2 rounded"
+                  >
+                    <Text className="text-white leading-2">LOG IN</Text>
+                  </TouchableOpacity>
+                  <View className="flex flex-row items-center mt-4">
+                    <Text className="text-black">
+                      Don't you have an account?{" "}
+                    </Text>
+                    <TouchableOpacity
+                      onPress={() => router.navigate("/signup")}
+                      className="justify-center flex items-center"
+                    >
+                      <Text className="underline font-semibold text-gray">
+                        Create account
+                      </Text>
+                    </TouchableOpacity>
+                  </View>
+                </>
+              )}
+            </KeyboardAvoidingView>
+          </View>
+        </View>
+      </BlurView>
     </View>
   );
 };

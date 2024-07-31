@@ -1,9 +1,4 @@
-import {
-  View,
-  TouchableOpacity,
-  Image,
-  SafeAreaView,
-} from "react-native";
+import { View, TouchableOpacity, Image, SafeAreaView } from "react-native";
 import React from "react";
 import { Ionicons } from "@expo/vector-icons";
 import Colors from "@/constants/Colors";
@@ -16,21 +11,13 @@ interface CustomHeaderProps {
 const CustomHeader = ({ onBackPress }: CustomHeaderProps) => {
   const { top } = useSafeAreaInsets();
   return (
-    <SafeAreaView>
-      <View className="relative w-full h-64">
-        <Image
-          className="w-full absolute h-full object-cover"
-          source={require("@/assets/images/topVector2.png")}
-        />
-        <TouchableOpacity
-          onPress={onBackPress}
-          className="absolute left-2"
-          style={{ top: top }}
-        >
-          <Ionicons name="arrow-back" size={34} color={Colors.dark} />
-        </TouchableOpacity>
-      </View>
-    </SafeAreaView>
+    <TouchableOpacity
+      onPress={onBackPress}
+      className="absolute left-2"
+      style={{ top: top }}
+    >
+      <Ionicons name="arrow-back" size={34} color={Colors.dark} />
+    </TouchableOpacity>
   );
 };
 
