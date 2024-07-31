@@ -31,17 +31,17 @@ export default function Home() {
             className="mt-4 cursor-pointer"
             onPress={handleClick}
           >
-            <Text className="text-lg text-blue-500 font-bold">
+            <Text className="text-lg text-primary font-bold">
               Edit schedule
             </Text>
           </TouchableOpacity>
 
           <View className="absolute right-0 bottom-0 h-16 w-16">
-            <View className="absolute right-[-34px] bottom-[10px] w-[170px] transform -rotate-45 bg-blue-500 py-1"></View>
+            <View className="absolute right-[-34px] bottom-[10px] w-[170px] transform -rotate-45 bg-primary py-1"></View>
           </View>
         </View>
         {/* //TODO:list popular workout routines or some articles*/}
-        <View className=" bg-red-400">
+        <View className="">
           <Text>popular workout routine 1</Text>
         </View>
       </View>
