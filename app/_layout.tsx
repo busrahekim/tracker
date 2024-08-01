@@ -16,6 +16,7 @@ import { useEffect } from "react";
 import { useColorScheme } from "react-native";
 import { GestureHandlerRootView } from "react-native-gesture-handler";
 import "react-native-reanimated";
+import { SafeAreaProvider } from "react-native-safe-area-context";
 
 export { ErrorBoundary } from "expo-router";
 
@@ -102,13 +103,15 @@ const RootLayoutNav = () => {
   return (
     <ThemeProvider value={colorScheme === "dark" ? DarkTheme : DefaultTheme}>
       <GestureHandlerRootView style={{ flex: 1 }}>
-        <AuthProvider>
-          <QueryClientProvider client={queryClient}>
-            <UserInactivityProvider>
-              <RootLayout />
-            </UserInactivityProvider>
-          </QueryClientProvider>
-        </AuthProvider>
+        <SafeAreaProvider>
+          <AuthProvider>
+            <QueryClientProvider client={queryClient}>
+              <UserInactivityProvider>
+                <RootLayout />
+              </UserInactivityProvider>
+            </QueryClientProvider>
+          </AuthProvider>
+        </SafeAreaProvider>
       </GestureHandlerRootView>
     </ThemeProvider>
   );

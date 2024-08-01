@@ -41,6 +41,10 @@ export const useFetchDB = () => {
 
     exercisesSnapshot.forEach((doc) => {
       exercises.push(doc.data());
+
+      //   if (data.day === dayName) {
+      //     exercisesForDay = data.exercises;
+      //   }
     });
 
     return exercises;
@@ -64,22 +68,33 @@ export const useFetchDB = () => {
     }
   };
 
-  const { data: stepsData, error: stepsError, isLoading: stepsLoading } = useQuery({
+  const {
+    data: stepsData,
+    error: stepsError,
+    isLoading: stepsLoading,
+  } = useQuery({
     queryKey: ["stepsData"],
     queryFn: fetchSteps,
   });
 
-  const { data: exercises, error: exercisesError, isLoading: exercisesLoading } = useQuery({
+  const {
+    data: exercises,
+    error: exercisesError,
+    isLoading: exercisesLoading,
+  } = useQuery({
     queryKey: ["exercises"],
     queryFn: fetchExercises,
   });
 
-  const { data: userDoc, error: userDocError, isLoading: userDocLoading } = useQuery({
+  const {
+    data: userDoc,
+    error: userDocError,
+    isLoading: userDocLoading,
+  } = useQuery({
     queryKey: ["userDoc"],
     queryFn: fetchUserData,
   });
 
-  // Handle loading and error states
   const loading = stepsLoading || exercisesLoading || userDocLoading;
   const error = stepsError || exercisesError || userDocError;
 
@@ -91,3 +106,40 @@ export const useFetchDB = () => {
     error,
   };
 };
+
+
+
+ // const addSteps = async (newSteps: StepData[]): Promise<void> => {
+  //   const stepsRef = collection(FIRESTORE_DB, "steps");
+
+  //   for (const step of newSteps) {
+  //     const stepDocRef = doc(stepsRef, `step${step.id}`);
+
+  //     await setDoc(stepDocRef, {
+  //       id: step.id,
+  //       stepTitle: step.stepTitle,
+  //     });
+
+  //     const contentRef = collection(stepDocRef, "content");
+  //     for (const content of step.content) {
+  //       await setDoc(doc(contentRef), content);
+  //     }
+  //   }
+
+  // };
+
+
+
+
+// const handleClick = async () => {
+
+//   try {
+//     const docRef = await addDoc(collection(FIRESTORE_DB, "users"), {
+//       first: "Ada",
+//       last: "Lovelace",
+//       born: 1815,
+//     });
+//   } catch (e) {
+//     console.error("Error adding document: ", e);
+//   }
+// };
