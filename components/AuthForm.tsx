@@ -1,5 +1,5 @@
 import { View, TouchableOpacity, TextInput } from "react-native";
-import React, { MutableRefObject, useRef, useState } from "react";
+import React, { MutableRefObject, useState } from "react";
 import Colors from "@/constants/Colors";
 import { Ionicons } from "@expo/vector-icons";
 

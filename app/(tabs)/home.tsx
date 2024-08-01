@@ -4,6 +4,7 @@ import { useHeaderHeight } from "@react-navigation/elements";
 import useUserDoc from "@/hooks/useUserDoc";
 import { useFirestoreDB } from "@/hooks/useFirestoreDB";
 import Loading from "@/components/Loading";
+import Ribbon from "@/components/Ribbon";
 
 export default function Home() {
   const router = useRouter();
@@ -66,9 +67,7 @@ export default function Home() {
             </>
           )}
 
-          <View className="absolute right-0 bottom-0 h-16 w-16">
-            <View className="absolute right-[-34px] bottom-[10px] w-[170px] transform -rotate-45 bg-primary py-1"></View>
-          </View>
+          <Ribbon />
         </View>
         <View className="">
           <Text>Todays Workout</Text>
