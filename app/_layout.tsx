@@ -9,6 +9,7 @@ import {
   DefaultTheme,
   ThemeProvider,
 } from "@react-navigation/native";
+import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 import { useFonts } from "expo-font";
 import { Stack, useRouter } from "expo-router";
 import * as SplashScreen from "expo-splash-screen";
@@ -24,6 +25,9 @@ import { GestureHandlerRootView } from "react-native-gesture-handler";
 import "react-native-reanimated";
 
 export { ErrorBoundary } from "expo-router";
+
+const queryClient = new QueryClient();
+
 
 SplashScreen.preventAutoHideAsync();
 
@@ -113,9 +117,11 @@ const RootLayoutNav = () => {
     <ThemeProvider value={colorScheme === "dark" ? DarkTheme : DefaultTheme}>
       <GestureHandlerRootView style={{ flex: 1 }}>
         <AuthProvider>
+        <QueryClientProvider client={queryClient}>
           <UserInactivityProvider>
             <RootLayout />
           </UserInactivityProvider>
+          </QueryClientProvider>
         </AuthProvider>
       </GestureHandlerRootView>
     </ThemeProvider>

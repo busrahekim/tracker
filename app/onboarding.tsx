@@ -1,11 +1,11 @@
 import { View, Text, TouchableOpacity } from "react-native";
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { Ionicons } from "@expo/vector-icons";
 import { useRouter } from "expo-router";
 import Step from "@/components/Step";
 import Steps, { StepData } from "@/constants/Steps";
 import { FIRESTORE_DB } from "@/firebaseConfig";
-import { doc, setDoc } from "firebase/firestore";
+import { collection, doc, getDocs, setDoc } from "firebase/firestore";
 import { getAuth } from "firebase/auth";
 
 const Onboarding = () => {
@@ -18,9 +18,33 @@ const Onboarding = () => {
   >({});
   const [loading, setLoading] = useState(false);
   const router = useRouter();
+  const [stepsData, setStepsData] = useState<StepData[]>([]);
+
+  useEffect(() => {
+    const fetchStepsFromFirestore = async () => {
+      const stepsRef = collection(FIRESTORE_DB, 'steps');
+      const stepsSnapshot = await getDocs(stepsRef);
+      
+      const steps = [];
+
+      for (const stepDoc of stepsSnapshot.docs) {
+        const stepData = stepDoc.data();
+        const contentRef = collection(stepDoc.ref, 'content');
+        const contentSnapshot = await getDocs(contentRef);
+
+        const contentData = contentSnapshot.docs.map(doc => doc.data());
+
+        steps.push({ ...stepData, content: contentData });
+      }
+
+      setStepsData(steps as StepData[]);
+    };
+
+    fetchStepsFromFirestore();
+  }, []);
 
   const handleNext = () => {
-    if (currentStep < Steps.length) {
+    if (currentStep < stepsData.length) {
       setCurrentStep(currentStep + 1);
     }
   };
@@ -43,13 +67,13 @@ const Onboarding = () => {
           userDoc,
           {
             workoutPlan:
-              Steps[0].content.find((c) => c.contentId === selectedContent[1])
+              stepsData[0].content.find((c) => c.contentId === selectedContent[1])
                 ?.title || "",
             unit:
-              Steps[1].content.find((c) => c.contentId === selectedContent[2])
+              stepsData[1].content.find((c) => c.contentId === selectedContent[2])
                 ?.title || "",
             frequency:
-              Steps[2].content.find((c) => c.contentId === selectedContent[3])
+              stepsData[2].content.find((c) => c.contentId === selectedContent[3])
                 ?.title || "",
           },
           { merge: true }
@@ -70,7 +94,7 @@ const Onboarding = () => {
     setSelectedContent({ ...selectedContent, [step]: contentId });
   };
 
-  const currentStepData: StepData | undefined = Steps.find(
+  const currentStepData: StepData | undefined = stepsData.find(
     (step) => step.id === currentStep
   );
 
@@ -80,7 +104,7 @@ const Onboarding = () => {
       <View className="w-3/4">
         {/* Progress Bar */}
         <View className="flex-row justify-between mb-2">
-          {Steps.map((_, index) => (
+          {stepsData.map((_, index) => (
             <View key={index} className="flex-1 mx-1">
               <View
                 className={`h-2 w-full rounded-full ${
@@ -93,7 +117,7 @@ const Onboarding = () => {
 
         {/* Current Step Title */}
         <Text className="ml-1 text-lg mt-2">
-          {Steps[currentStep - 1]?.stepTitle}
+          {stepsData[currentStep - 1]?.stepTitle}
         </Text>
       </View>
 
@@ -130,3 +154,4 @@ const Onboarding = () => {
 };
 
 export default Onboarding;
+
