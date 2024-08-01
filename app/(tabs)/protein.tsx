@@ -1,11 +1,11 @@
 import { View, Text, TouchableOpacity } from "react-native";
 import React from "react";
 import { BlurView } from "expo-blur";
-import useUserDoc from "@/hooks/useUserDoc";
 import Loading from "@/components/Loading";
+import { useFetchDB } from "@/hooks/useFetchDB";
 
 const Protein = () => {
-  const { userDoc, loading, error } = useUserDoc();
+  const { userDoc, loading, error } = useFetchDB();
 
   if (loading) {
     return <Loading />;
@@ -14,7 +14,7 @@ const Protein = () => {
   if (error) {
     return (
       <View className="flex-1 justify-center items-center">
-        <Text className="text-lg font-bold text-red-500">{error}</Text>
+        <Text className="text-lg font-bold text-red-500">{error.message}</Text>
       </View>
     );
   }

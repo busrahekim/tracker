@@ -8,8 +8,7 @@ import {
   MaterialCommunityIcons,
   MaterialIcons,
 } from "@expo/vector-icons";
-import HomeTabHeader from "@/components/HomeTabHeader";
-
+import TabHeader from "@/components/TabHeader";
 
 export default function TabLayout() {
   return (
@@ -50,6 +49,8 @@ export default function TabLayout() {
         tabBarShowLabel: false,
         tabBarInactiveTintColor: Colors.gray,
         tabBarActiveTintColor: Colors.lightGray,
+        headerTransparent: true,
+        header: () => <TabHeader />,
       }}
     >
       <Tabs.Screen
@@ -77,8 +78,8 @@ export default function TabLayout() {
           //     </Pressable>
           //   </Link>
           // ),
-          headerTransparent: true,
-          header: () => <HomeTabHeader />,
+          // headerTransparent: true,
+          // header: () => <HomeTabHeader />,
         }}
       />
       <Tabs.Screen
@@ -96,6 +97,8 @@ export default function TabLayout() {
               />
             </View>
           ),
+          // headerTransparent: true,
+          // header: () => <HomeTabHeader />,
         }}
       />
       <Tabs.Screen

@@ -1,22 +1,21 @@
 import { TouchableOpacity, Text, View, ScrollView } from "react-native";
 import { useRouter } from "expo-router";
 import { useHeaderHeight } from "@react-navigation/elements";
-import useUserDoc from "@/hooks/useUserDoc";
 import { useFirestoreDB } from "@/hooks/useFirestoreDB";
 import Loading from "@/components/Loading";
 import Ribbon from "@/components/Ribbon";
+import { useFetchDB } from "@/hooks/useFetchDB";
 
 export default function Home() {
   const router = useRouter();
-  const { userDoc, loading } = useUserDoc();
+  const { userDoc, loading } = useFetchDB();
   const headerHeight = useHeaderHeight();
 
   const handleClick = () => {
     router.replace("/onboarding");
   };
 
-  // Get current day (or however you want to determine the day)
-  const currentDayName = new Date().toLocaleDateString("en-US", {
+  const currentDayName = new Date().toLocaleDateString("en-GB", {
     weekday: "long",
   });
 
@@ -36,8 +35,8 @@ export default function Home() {
         paddingTop: headerHeight,
       }}
     >
-      <View className="flex-1 items-center justify-center mx-3">
-        <View className="justify-center w-full m-3 rounded-md p-3 border-b-2 border-r-2 overflow-hidden relative bg-white">
+      <View className="flex-1 gap-y-2 justify-center m-3">
+        <View className="w-full rounded-md p-3 border-b-2 border-r-2 overflow-hidden relative bg-white">
           <Text className="text-2xl">Hi, buddy!</Text>
           {userDoc?.workoutPlan ? (
             <>
@@ -70,7 +69,8 @@ export default function Home() {
           <Ribbon />
         </View>
         <View className="">
-          <Text>Todays Workout</Text>
+          <Text className="text-2xl">{currentDayName}</Text>
+          <Text>No planned workout for today</Text>
         </View>
       </View>
     </ScrollView>

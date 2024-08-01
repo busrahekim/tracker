@@ -1,11 +1,50 @@
-import { View, Text } from "react-native";
+import { View, Text, ScrollView } from "react-native";
 import React from "react";
+import { useHeaderHeight } from "@react-navigation/elements";
+import { useFetchDB } from "@/hooks/useFetchDB";
+import Loading from "@/components/Loading";
 
 const Workout = () => {
+  const headerHeight = useHeaderHeight();
+  const { exercises, loading, error } = useFetchDB();
+
+  if (loading) {
+    return <Loading />;
+  }
+
+  if (error) {
+    return <Text>{error.message}</Text>; 
+  }
+
   return (
-    <View>
-      <Text>YOU DO NOT HAVE Workout PLAN YET</Text>
-    </View>
+    <ScrollView
+      contentContainerStyle={{
+        paddingTop: headerHeight,
+      }}
+      className="p-3 flex-1"
+    >
+      {exercises && exercises.length > 0 ? (
+        <>
+          <Text className="text-2xl">Current Workout Plan</Text>
+          {exercises.map((workout) => (
+            <View key={workout.day} className="gap-y-2 mt-2">
+              <Text
+                style={{ fontWeight: "bold", fontSize: 18, marginBottom: 5 }}
+              >
+                {workout.day.toUpperCase()}
+              </Text>
+              {workout.exercises.map((exercise: string, index: number) => (
+                <Text key={index} style={{ marginLeft: 10 }}>
+                  - {exercise}
+                </Text>
+              ))}
+            </View>
+          ))}
+        </>
+      ) : (
+        <Text>YOU DO NOT HAVE A WORKOUT PLAN YET</Text>
+      )}
+    </ScrollView>
   );
 };
 
