@@ -1,5 +1,4 @@
 import Loading from "@/components/Loading";
-import Colors from "@/constants/Colors";
 import { AuthProvider } from "@/context/AuthContext";
 import { UserInactivityProvider } from "@/context/UserInactivity";
 import FontAwesome from "@expo/vector-icons/FontAwesome";
@@ -14,7 +13,7 @@ import { Stack } from "expo-router";
 import * as SplashScreen from "expo-splash-screen";
 import { getAuth, onAuthStateChanged } from "firebase/auth";
 import { useEffect } from "react";
-import { ActivityIndicator, View, useColorScheme } from "react-native";
+import { useColorScheme } from "react-native";
 import { GestureHandlerRootView } from "react-native-gesture-handler";
 import "react-native-reanimated";
 

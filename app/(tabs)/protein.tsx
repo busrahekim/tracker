@@ -1,17 +1,14 @@
-import { View, Text, ActivityIndicator, TouchableOpacity } from "react-native";
+import { View, Text, TouchableOpacity } from "react-native";
 import React from "react";
 import { BlurView } from "expo-blur";
 import useUserDoc from "@/hooks/useUserDoc";
+import Loading from "@/components/Loading";
 
 const Protein = () => {
   const { userDoc, loading, error } = useUserDoc();
 
   if (loading) {
-    return (
-      <View className="flex-1 justify-center items-center">
-        <ActivityIndicator size="large" color="#0000ff" />
-      </View>
-    );
+    return <Loading />;
   }
 
   if (error) {

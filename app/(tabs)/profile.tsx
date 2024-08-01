@@ -1,11 +1,9 @@
-import { useAuth } from "@/context/AuthContext";
 import { FIREBASE_APP } from "@/firebaseConfig";
 import { useRouter } from "expo-router";
 import { getAuth, signOut } from "firebase/auth";
 import { TouchableOpacity, View, Text } from "react-native";
 
 export default function Profile() {
-  const { user } = useAuth();
   const router = useRouter();
   const handleSignOut = async () => {
     try {

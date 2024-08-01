@@ -24,7 +24,7 @@ const Page = () => {
           Ready to change the way you track your workout ?
         </Text>
       </View>
-      <View className="flex flex-row justify-center gap-5 mb-14 px-5">
+      <View className="flex flex-row gap-4 p-6">
         <Link
           href={"/(auth)/login"}
           className="p-2 h-14 rounded-full justify-center items-center flex-1"
