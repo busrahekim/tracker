@@ -23,7 +23,7 @@ export const UserInactivityProvider = ({ children }: any) => {
 
   const handleAppStateChange = async (nextAppState: AppStateStatus) => {
 
-    console.log("nextAppState: ", nextAppState);
+    // console.log("nextAppState: ", nextAppState);
     if (nextAppState === "background") {
       recordStartTime();
     } else if (

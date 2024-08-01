@@ -1,8 +1,7 @@
-import CustomHeader from "@/components/CustomHeader";
+import Loading from "@/components/Loading";
 import Colors from "@/constants/Colors";
 import { AuthProvider } from "@/context/AuthContext";
 import { UserInactivityProvider } from "@/context/UserInactivity";
-import { Ionicons } from "@expo/vector-icons";
 import FontAwesome from "@expo/vector-icons/FontAwesome";
 import {
   DarkTheme,
@@ -11,16 +10,11 @@ import {
 } from "@react-navigation/native";
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 import { useFonts } from "expo-font";
-import { Stack, useRouter } from "expo-router";
+import { Stack } from "expo-router";
 import * as SplashScreen from "expo-splash-screen";
 import { getAuth, onAuthStateChanged } from "firebase/auth";
 import { useEffect } from "react";
-import {
-  ActivityIndicator,
-  TouchableOpacity,
-  View,
-  useColorScheme,
-} from "react-native";
+import { ActivityIndicator, View, useColorScheme } from "react-native";
 import { GestureHandlerRootView } from "react-native-gesture-handler";
 import "react-native-reanimated";
 
@@ -28,11 +22,9 @@ export { ErrorBoundary } from "expo-router";
 
 const queryClient = new QueryClient();
 
-
 SplashScreen.preventAutoHideAsync();
 
 const RootLayout = () => {
-  const router = useRouter();
   const [loaded, error] = useFonts({
     SpaceMono: require("../assets/fonts/SpaceMono-Regular.ttf"),
     ...FontAwesome.font,
@@ -42,7 +34,6 @@ const RootLayout = () => {
   onAuthStateChanged(auth, (user) => {
     if (user) {
       const uid = user.uid;
-      // console.log("auth state: ", uid);
     } else {
       // User is signed out
     }
@@ -60,11 +51,7 @@ const RootLayout = () => {
   }, [loaded]);
 
   if (!loaded) {
-    return (
-      <View style={{ flex: 1, justifyContent: "center", alignItems: "center" }}>
-        <ActivityIndicator size="large" color={Colors.primary} />
-      </View>
-    );
+    return <Loading />;
   }
 
   return (
@@ -117,10 +104,10 @@ const RootLayoutNav = () => {
     <ThemeProvider value={colorScheme === "dark" ? DarkTheme : DefaultTheme}>
       <GestureHandlerRootView style={{ flex: 1 }}>
         <AuthProvider>
-        <QueryClientProvider client={queryClient}>
-          <UserInactivityProvider>
-            <RootLayout />
-          </UserInactivityProvider>
+          <QueryClientProvider client={queryClient}>
+            <UserInactivityProvider>
+              <RootLayout />
+            </UserInactivityProvider>
           </QueryClientProvider>
         </AuthProvider>
       </GestureHandlerRootView>

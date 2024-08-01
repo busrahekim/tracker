@@ -10,7 +10,6 @@ export default function Profile() {
   const handleSignOut = async () => {
     try {
       await signOut(getAuth(FIREBASE_APP));
-      console.log("logged out");
       router.replace("/(auth)/login");
     } catch (error) {
       console.error("Error signing out: ", error);

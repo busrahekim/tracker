@@ -40,7 +40,6 @@ export const useFirestoreDB = () => {
 
     exercisesSnapshot.forEach((doc) => {
       const data = doc.data();
-      // console.log(data);
 
     //   if (data.day === dayName) {
     //     exercisesForDay = data.exercises;
@@ -84,7 +83,6 @@ export const useFirestoreDB = () => {
       }
     }
 
-    console.log("Steps data added to Firestore");
   };
 
   const mutation = useMutation<void, Error, StepData[]>({
@@ -109,7 +107,6 @@ export const useFirestoreDB = () => {
 
 
 // const handleClick = async () => {
-//   console.log("clicked");
 
 //   try {
 //     const docRef = await addDoc(collection(FIRESTORE_DB, "users"), {
@@ -117,7 +114,6 @@ export const useFirestoreDB = () => {
 //       last: "Lovelace",
 //       born: 1815,
 //     });
-//     console.log("Document written with ID: ", docRef.id);
 //   } catch (e) {
 //     console.error("Error adding document: ", e);
 //   }

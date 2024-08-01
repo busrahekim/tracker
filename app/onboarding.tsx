@@ -3,22 +3,20 @@ import React, { useEffect, useState } from "react";
 import { Fontisto, Ionicons } from "@expo/vector-icons";
 import { useRouter } from "expo-router";
 import Step from "@/components/Step";
-import Steps, { StepData } from "@/constants/Steps";
+import { StepData } from "@/constants/Steps";
 import { FIRESTORE_DB } from "@/firebaseConfig";
 import { collection, doc, getDocs, setDoc } from "firebase/firestore";
 import { getAuth } from "firebase/auth";
 import DateTimePicker from "@react-native-community/datetimepicker";
 import Colors from "@/constants/Colors";
+import Loading from "@/components/Loading";
 
 const Onboarding = () => {
   const [currentStep, setCurrentStep] = useState(1);
-  //   const [selectedContent, setSelectedContent] = useState<{
-  //     [key: number]: number | null;
-  //   }>({});
   const [selectedContent, setSelectedContent] = useState<
     Record<number, number>
   >({});
-  const [loading, setLoading] = useState(false);
+  const [loading, setLoading] = useState(true);
   const router = useRouter();
   const [stepsData, setStepsData] = useState<StepData[]>([]);
   const [selectedDate, setSelectedDate] = useState<Date | null>(null);
@@ -51,10 +49,15 @@ const Onboarding = () => {
       }
 
       setStepsData(steps as StepData[]);
+      setLoading(false);
     };
 
     fetchStepsFromFirestore();
   }, []);
+
+  if (loading) {
+    return <Loading />;
+  }
 
   const handleNext = () => {
     if (currentStep < stepsData.length) {
@@ -68,7 +71,6 @@ const Onboarding = () => {
     }
   };
 
-  //   TODO: Finish logic, loading screen & firebase database
   const handleFinish = async () => {
     setLoading(true);
     const auth = getAuth();
@@ -102,7 +104,6 @@ const Onboarding = () => {
         );
         setLoading(false);
         router.replace("/(tabs)/home");
-        console.log("Onboarding complete!");
       } catch (error) {
         console.error("Error updating document: ", error);
         setLoading(false);
@@ -111,8 +112,6 @@ const Onboarding = () => {
   };
 
   const handleSelect = (step: number, contentId: number) => {
-    console.log(`Selected content ${contentId} on step ${step}`);
-    // setSelectedContent((prev) => ({ ...prev, [step]: contentId }));
     setSelectedContent({ ...selectedContent, [step]: contentId });
   };
 
@@ -124,7 +123,6 @@ const Onboarding = () => {
     <View className="flex-1 items-center justify-around">
       {/* Progress Bar */}
       <View className="w-3/4">
-        {/* Progress Bar */}
         <View className="flex-row justify-between mb-2">
           {stepsData.map((_, index) => (
             <View key={index} className="flex-1 mx-1">
@@ -143,6 +141,7 @@ const Onboarding = () => {
         </Text>
       </View>
 
+      {/* Current Step Content */}
       {currentStep === 4 ? (
         <>
           <TouchableOpacity onPress={() => setShowDatePicker(true)}>

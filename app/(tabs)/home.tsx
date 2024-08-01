@@ -3,21 +3,32 @@ import { useRouter } from "expo-router";
 import { useHeaderHeight } from "@react-navigation/elements";
 import useUserDoc from "@/hooks/useUserDoc";
 import { useFirestoreDB } from "@/hooks/useFirestoreDB";
+import Loading from "@/components/Loading";
 
 export default function Home() {
   const router = useRouter();
-  const { userDoc } = useUserDoc();
+  const { userDoc, loading } = useUserDoc();
   const headerHeight = useHeaderHeight();
 
   const handleClick = () => {
     router.replace("/onboarding");
   };
 
-   // Get current day (or however you want to determine the day)
-   const currentDayName = new Date().toLocaleDateString('en-US', { weekday: 'long' });
+  // Get current day (or however you want to determine the day)
+  const currentDayName = new Date().toLocaleDateString("en-US", {
+    weekday: "long",
+  });
 
-  const { data: exercisesForDay, isLoading, error } = useFirestoreDB().useExercisesForDay(currentDayName);
-  
+  const {
+    data: exercisesForDay,
+    isLoading,
+    error,
+  } = useFirestoreDB().useExercisesForDay(currentDayName);
+
+  if (loading) {
+    return <Loading />;
+  }
+
   return (
     <ScrollView
       contentContainerStyle={{
@@ -66,4 +77,3 @@ export default function Home() {
     </ScrollView>
   );
 }
-
