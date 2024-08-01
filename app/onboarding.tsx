@@ -1,12 +1,14 @@
-import { View, Text, TouchableOpacity } from "react-native";
+import { View, Text, TouchableOpacity, Platform } from "react-native";
 import React, { useEffect, useState } from "react";
-import { Ionicons } from "@expo/vector-icons";
+import { Fontisto, Ionicons } from "@expo/vector-icons";
 import { useRouter } from "expo-router";
 import Step from "@/components/Step";
 import Steps, { StepData } from "@/constants/Steps";
 import { FIRESTORE_DB } from "@/firebaseConfig";
 import { collection, doc, getDocs, setDoc } from "firebase/firestore";
 import { getAuth } from "firebase/auth";
+import DateTimePicker from "@react-native-community/datetimepicker";
+import Colors from "@/constants/Colors";
 
 const Onboarding = () => {
   const [currentStep, setCurrentStep] = useState(1);
@@ -19,20 +21,31 @@ const Onboarding = () => {
   const [loading, setLoading] = useState(false);
   const router = useRouter();
   const [stepsData, setStepsData] = useState<StepData[]>([]);
+  const [selectedDate, setSelectedDate] = useState<Date | null>(null);
+  const [showDatePicker, setShowDatePicker] = useState(false);
+
+  const handleDateChange = (event: any, date?: Date) => {
+    if (Platform.OS === "android") {
+      setShowDatePicker(false);
+    }
+    if (date) {
+      setSelectedDate(date);
+    }
+  };
 
   useEffect(() => {
     const fetchStepsFromFirestore = async () => {
-      const stepsRef = collection(FIRESTORE_DB, 'steps');
+      const stepsRef = collection(FIRESTORE_DB, "steps");
       const stepsSnapshot = await getDocs(stepsRef);
-      
+
       const steps = [];
 
       for (const stepDoc of stepsSnapshot.docs) {
         const stepData = stepDoc.data();
-        const contentRef = collection(stepDoc.ref, 'content');
+        const contentRef = collection(stepDoc.ref, "content");
         const contentSnapshot = await getDocs(contentRef);
 
-        const contentData = contentSnapshot.docs.map(doc => doc.data());
+        const contentData = contentSnapshot.docs.map((doc) => doc.data());
 
         steps.push({ ...stepData, content: contentData });
       }
@@ -62,19 +75,28 @@ const Onboarding = () => {
     const user = auth.currentUser;
     if (user) {
       const userDoc = doc(FIRESTORE_DB, "users", user.uid);
+
+      const formattedDate = selectedDate
+        ? selectedDate.toISOString().split("T")[0]
+        : "";
+
       try {
         await setDoc(
           userDoc,
           {
             workoutPlan:
-              stepsData[0].content.find((c) => c.contentId === selectedContent[1])
-                ?.title || "",
+              stepsData[0].content.find(
+                (c) => c.contentId === selectedContent[1]
+              )?.title || "",
             unit:
-              stepsData[1].content.find((c) => c.contentId === selectedContent[2])
-                ?.title || "",
+              stepsData[1].content.find(
+                (c) => c.contentId === selectedContent[2]
+              )?.title || "",
             frequency:
-              stepsData[2].content.find((c) => c.contentId === selectedContent[3])
-                ?.title || "",
+              stepsData[2].content.find(
+                (c) => c.contentId === selectedContent[3]
+              )?.title || "",
+            startDate: formattedDate,
           },
           { merge: true }
         );
@@ -121,15 +143,34 @@ const Onboarding = () => {
         </Text>
       </View>
 
-      {/* Step Content */}
-      {currentStepData ? (
-        <Step
-          step={currentStep}
-          data={currentStepData}
-          onSelect={handleSelect}
-        />
+      {currentStep === 4 ? (
+        <>
+          <TouchableOpacity onPress={() => setShowDatePicker(true)}>
+            <Fontisto name="date" size={24} color={Colors.dark} />
+          </TouchableOpacity>
+          {showDatePicker && (
+            <DateTimePicker
+              value={selectedDate || new Date()}
+              mode="date"
+              display="calendar"
+              onChange={handleDateChange}
+              minimumDate={new Date()}
+            />
+          )}
+          {selectedDate && (
+            <Text className="mt-4">
+              Selected Date: {selectedDate.toLocaleDateString()}
+            </Text>
+          )}
+        </>
       ) : (
-        <Text className="text-2xl">Step {currentStep}</Text>
+        currentStepData && (
+          <Step
+            step={currentStep}
+            data={currentStepData}
+            onSelect={handleSelect}
+          />
+        )
       )}
 
       {/* Navigation Controls */}
@@ -139,7 +180,7 @@ const Onboarding = () => {
             <Ionicons name="arrow-back" size={24} color="blue" />
           </TouchableOpacity>
         )}
-        {currentStep < Steps.length ? (
+        {currentStep < stepsData.length ? (
           <TouchableOpacity onPress={handleNext} className="p-2 ml-auto">
             <Ionicons name="arrow-forward" size={24} color="blue" />
           </TouchableOpacity>
@@ -154,4 +195,3 @@ const Onboarding = () => {
 };
 
 export default Onboarding;
-

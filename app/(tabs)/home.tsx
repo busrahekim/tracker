@@ -31,7 +31,7 @@ export default function Home() {
             <>
               {/* if there is workout schedule */}
               <Text className="text-lg">Ready to hit some PR's?</Text>
-              <TouchableOpacity onPress={() => {}}>
+              <TouchableOpacity onPress={handleClick}>
                 <Text>add</Text>
               </TouchableOpacity>
             </>

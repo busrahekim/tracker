@@ -40,7 +40,7 @@ export const useFirestoreDB = () => {
 
     exercisesSnapshot.forEach((doc) => {
       const data = doc.data();
-      console.log(data);
+      // console.log(data);
 
     //   if (data.day === dayName) {
     //     exercisesForDay = data.exercises;
