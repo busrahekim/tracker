@@ -9,6 +9,7 @@ import React, { useRef, useState } from "react";
 import Swiper from "react-native-swiper";
 import moment from "moment";
 import useWeeks from "@/hooks/useWeeks";
+import Colors from "@/constants/Colors";
 
 const { width } = Dimensions.get("window");
 
@@ -63,8 +64,8 @@ const DateSwiper = () => {
                       style={[
                         styles.item,
                         isActive && {
-                          backgroundColor: "#111",
-                          borderColor: "#111",
+                          backgroundColor: Colors.primary,
+                          borderColor: Colors.primary,
                         },
                       ]}
                     >
@@ -167,7 +168,7 @@ const styles = StyleSheet.create({
   itemDate: {
     fontSize: 15,
     fontWeight: "600",
-    color: "#111",
+    color: Colors.primary,
   },
   /** Placeholder */
   placeholder: {
@@ -188,24 +189,7 @@ const styles = StyleSheet.create({
     flexShrink: 1,
     flexBasis: 0,
   },
-  /** Button */
-  btn: {
-    flexDirection: "row",
-    alignItems: "center",
-    justifyContent: "center",
-    borderRadius: 8,
-    paddingVertical: 10,
-    paddingHorizontal: 20,
-    borderWidth: 1,
-    backgroundColor: "#007aff",
-    borderColor: "#007aff",
-  },
-  btnText: {
-    fontSize: 18,
-    lineHeight: 26,
-    fontWeight: "600",
-    color: "#fff",
-  },
+
 });
 
 export default DateSwiper;

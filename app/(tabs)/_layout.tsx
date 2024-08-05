@@ -107,7 +107,7 @@ export default function TabLayout() {
           title: "",
           tabBarIcon: ({ size, color, focused }) => (
             <View className={`p-3 ${focused ? "bg-primary rounded-full" : ""}`}>
-              <MaterialIcons name="set-meal" size={size} color={color} />
+              <MaterialCommunityIcons name="food-apple-outline" size={size} color={color} />
             </View>
           ),
         }}
@@ -121,6 +121,7 @@ export default function TabLayout() {
               <Ionicons name="person-outline" size={size} color={color} />
             </View>
           ),
+          tabBarButton: () => null
         }}
       />
     </Tabs>

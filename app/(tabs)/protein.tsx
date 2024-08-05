@@ -33,7 +33,7 @@ const Protein = () => {
         <View className="w-full h-full justify-center">
           <BlurView intensity={100} tint="light">
             <View className="w-full h-full justify-center items-center">
-              <TouchableOpacity className="rounded bg-secondary w-full justify-center items-center">
+              <TouchableOpacity className="rounded bg-primary w-full justify-center items-center">
                 <Text className="text-lg text-white">Get Premium for $5</Text>
               </TouchableOpacity>
             </View>

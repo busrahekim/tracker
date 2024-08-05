@@ -1,4 +1,12 @@
-import { View, Text, TouchableOpacity, Image, Alert } from "react-native";
+import {
+  View,
+  Text,
+  TouchableOpacity,
+  Image,
+  Alert,
+  TextInput,
+  KeyboardAvoidingView,
+} from "react-native";
 import React, { useState } from "react";
 import { useData } from "@/context/DataContext";
 import { MaterialIcons } from "@expo/vector-icons";
@@ -58,7 +66,7 @@ const WorkoutTrackView = () => {
     }
     closeDialog();
   };
-  
+
   const takePhoto = async () => {
     if (selectedIndex === null) return;
 
@@ -98,7 +106,7 @@ const WorkoutTrackView = () => {
   };
 
   return (
-    <View className="mt-2">
+    <View className="mt-2 gap-y-3">
       {/* Image Insert*/}
       <View className="flex flex-row justify-around gap-2">
         {photoUris.map((photoUri, index) => (
@@ -125,6 +133,38 @@ const WorkoutTrackView = () => {
           </TouchableOpacity>
         ))}
       </View>
+      {/* Exercises and Inputs */}
+      <View className="flex-row gap-2 flex-wrap">
+        {currentExercises.length > 0 ? (
+          currentExercises.map((exercise: string, exerciseIndex: number) => (
+            <TouchableOpacity key={exerciseIndex} className="mt-2 bg-primary rounded-full p-3 items-center">
+              <Text className="text-lg text-white">{exercise}</Text>
+
+              {/* Add two sets of inputs for each,z exercise */}
+              {/* {[1, 2].map((setIndex) => (
+                <View
+                  key={setIndex}
+                  className="flex flex-row justify-around gap-2 items-center mt-2"
+                >
+                  <TextInput
+                    className="flex-1 bg-lightGray rounded p-1"
+                    placeholder={`Set ${setIndex} - kg`}
+                    placeholderTextColor={Colors.dark}
+                  />
+                  <TextInput
+                    className="flex-1 bg-lightGray rounded p-1"
+                    placeholder={`Set ${setIndex} - reps`}
+                    placeholderTextColor={Colors.dark}
+                  />
+                </View>
+              ))} */}
+            </TouchableOpacity>
+          ))
+        ) : (
+          <Text>No exercises for today.</Text>
+        )}
+      </View>
+
       {/* Custom Dialog */}
       <CustomizedDialog
         visible={dialogVisible}

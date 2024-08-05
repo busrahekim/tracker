@@ -19,13 +19,12 @@ const CustomizedDialog = ({
     <Portal>
       <Dialog visible={visible} onDismiss={onDismiss}>
         <Dialog.Title>Choose Image Source</Dialog.Title>
-        <Dialog.Content>
-          {/*TODO: need customize */}
+        <Dialog.Content className="gap-y-1">
           <TouchableOpacity onPress={onTakePhoto}>
-            <Text>Take Photo</Text>
+            <Text className="text-lg text-primary">Take Photo</Text>
           </TouchableOpacity>
           <TouchableOpacity onPress={onChooseFromGallery}>
-            <Text>Choose from gallery</Text>
+            <Text className="text-lg text-primary">Choose from gallery</Text>
           </TouchableOpacity>
         </Dialog.Content>
         <Dialog.Actions>

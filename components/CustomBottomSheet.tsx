@@ -1,6 +1,9 @@
-import { Text, StyleSheet, TouchableOpacity } from "react-native";
+import { Text, StyleSheet, TouchableOpacity, View } from "react-native";
 import React, { forwardRef } from "react";
-import BottomSheet, { BottomSheetScrollView } from "@gorhom/bottom-sheet";
+import BottomSheet, {
+  BottomSheetBackdrop,
+  BottomSheetScrollView,
+} from "@gorhom/bottom-sheet";
 import WorkoutTrackView from "./WorkoutTrackView";
 import { useData } from "@/context/DataContext";
 
@@ -16,6 +19,17 @@ const CustomBottomSheet = forwardRef<BottomSheet, CustomBottomSheetProps>(
 
     const { currentWorkout } = useData();
 
+    // not working :(
+    const renderBackdrop = (props: any) => (
+      <BottomSheetBackdrop
+        {...props}
+        disappearsOnIndex={1}
+        appearsOnIndex={2}
+        opacity={0.5} // Adjust the opacity as needed
+        style={{ backgroundColor: "rgba(0, 0, 0, 0.5)" }} // Semi-transparent black
+      />
+    );
+
     return (
       <BottomSheet
         ref={ref}
@@ -25,13 +39,25 @@ const CustomBottomSheet = forwardRef<BottomSheet, CustomBottomSheetProps>(
         enablePanDownToClose={true} // Enable this prop to allow closing
         backgroundStyle={styles.bottomSheetBackground}
         handleStyle={styles.bottomSheetHandle}
+        backdropComponent={renderBackdrop}
       >
         <BottomSheetScrollView
           contentContainerStyle={{
             padding: 20,
           }}
         >
-          <Text className="text-xl font-bold uppercase">{currentWorkout}</Text>
+          <View className="flex-row items-center justify-between">
+            <Text className="text-xl font-bold uppercase">
+              {currentWorkout}
+            </Text>
+            <TouchableOpacity
+              onPress={onClose}
+              className=""
+            >
+              <Text className="text-primary font-bold text-center text-lg">Finish</Text>
+            </TouchableOpacity>
+          </View>
+
           <WorkoutTrackView />
           {/* {currentExercises.length > 0 ? (
           currentExercises.map((exercise: string, index: number) => (
@@ -42,12 +68,12 @@ const CustomBottomSheet = forwardRef<BottomSheet, CustomBottomSheetProps>(
         ) : (
           <Text>No exercises for today.</Text>
         )} */}
-          <TouchableOpacity
+          {/* <TouchableOpacity
             onPress={onClose}
             className="mt-5 bg-primary p-2 rounded-md"
           >
             <Text className="text-white text-center text-lg">Finish</Text>
-          </TouchableOpacity>
+          </TouchableOpacity> */}
         </BottomSheetScrollView>
       </BottomSheet>
     );
@@ -57,8 +83,8 @@ const CustomBottomSheet = forwardRef<BottomSheet, CustomBottomSheetProps>(
 const styles = StyleSheet.create({
   bottomSheetBackground: {
     backgroundColor: "white",
-    borderTopLeftRadius: 40,
-    borderTopRightRadius: 40,
+    borderTopLeftRadius: 20,
+    borderTopRightRadius: 20,
   },
   bottomSheetHandle: {
     backgroundColor: "#e9ecef",
