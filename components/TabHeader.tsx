@@ -14,6 +14,7 @@ import { useFetchDB } from "@/hooks/useFetchDB";
 const TabHeader = () => {
   const { top } = useSafeAreaInsets();
   const { userDoc } = useFetchDB();
+  
 
   const firstLetterOfName = userDoc?.name.charAt(0) || "";
 

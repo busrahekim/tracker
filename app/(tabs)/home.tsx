@@ -3,7 +3,6 @@ import {
   Text,
   View,
   ScrollView,
-  StyleSheet,
 } from "react-native";
 import { useRouter } from "expo-router";
 import { useHeaderHeight } from "@react-navigation/elements";
@@ -11,8 +10,9 @@ import Loading from "@/components/Loading";
 import Ribbon from "@/components/Ribbon";
 import { useFetchDB } from "@/hooks/useFetchDB";
 import { useRef, useState } from "react";
-import BottomSheet, { BottomSheetScrollView } from "@gorhom/bottom-sheet";
+import BottomSheet from "@gorhom/bottom-sheet";
 import { GestureHandlerRootView } from "react-native-gesture-handler";
+import CustomBottomSheet from "@/components/CustomBottomSheet";
 
 export default function Home() {
   const router = useRouter();
@@ -21,16 +21,17 @@ export default function Home() {
   const [isModalVisible, setModalVisible] = useState(false);
   const bottomSheetRef = useRef<BottomSheet>(null);
 
-  const handleClick = () => {
-    router.replace("/onboarding");
-  };
-
   const currentDate = new Date().toISOString().split("T")[0];
   const currentDayName = new Date().toLocaleDateString("en-GB", {
     weekday: "long",
   });
+
   const currentWorkout =
     userDoc?.schedule?.[currentDate] || "No planned workout for today";
+
+  const currentExercises =
+    exercises?.find((workout) => workout.day === currentWorkout)?.exercises ||
+    [];
 
   const showModal = () => {
     setModalVisible(true);
@@ -42,9 +43,9 @@ export default function Home() {
     setTimeout(() => setModalVisible(false), 100);
   };
 
-  const currentExercises =
-    exercises?.find((workout) => workout.day === currentWorkout)?.exercises ||
-    [];
+  const handleClick = () => {
+    router.replace("/onboarding");
+  };
 
   if (loading) {
     return <Loading />;
@@ -95,63 +96,16 @@ export default function Home() {
         </View>
         {/* Bottom Sheet */}
         {isModalVisible && (
-          <BottomSheet
+          <CustomBottomSheet
             ref={bottomSheetRef}
-            index={0} // // hide the sheet initially
-            snapPoints={["50%", "75%", "90%"]}
+            isVisible={isModalVisible}
             onClose={hideModal}
-            enablePanDownToClose={true} // Enable this prop to allow closing
-            backgroundStyle={styles.bottomSheetBackground}
-            handleStyle={styles.bottomSheetHandle}
-          >
-            <BottomSheetScrollView
-              contentContainerStyle={styles.bottomSheetContent}
-            >
-              <Text className="text-lg">Workout Details</Text>
-              <Text className="mt-2">{currentWorkout} Day</Text>
-              {currentExercises.length > 0 ? (
-                currentExercises.map((exercise: string, index: number) => (
-                  <Text key={index} className="text-lg">
-                    - {exercise}
-                  </Text>
-                ))
-              ) : (
-                <Text>No exercises for today.</Text>
-              )}
-              <TouchableOpacity onPress={hideModal} style={styles.closeButton}>
-                <Text style={styles.closeButtonText}>Close</Text>
-              </TouchableOpacity>
-            </BottomSheetScrollView>
-          </BottomSheet>
+            currentWorkout={currentWorkout}
+            currentExercises={currentExercises}
+          />
         )}
       </ScrollView>
     </GestureHandlerRootView>
   );
 }
 
-const styles = StyleSheet.create({
-  bottomSheetBackground: {
-    backgroundColor: "white",
-    borderTopLeftRadius: 15,
-    borderTopRightRadius: 15,
-  },
-  bottomSheetHandle: {
-    backgroundColor: "#ccc",
-    height: 5,
-    borderTopLeftRadius: 15,
-    borderTopRightRadius: 15,
-  },
-  bottomSheetContent: {
-    padding: 20,
-  },
-  closeButton: {
-    marginTop: 20,
-    backgroundColor: "#f00",
-    padding: 10,
-    borderRadius: 5,
-  },
-  closeButtonText: {
-    color: "#fff",
-    textAlign: "center",
-  },
-});
