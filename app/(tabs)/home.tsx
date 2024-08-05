@@ -1,9 +1,4 @@
-import {
-  TouchableOpacity,
-  Text,
-  View,
-  ScrollView,
-} from "react-native";
+import { TouchableOpacity, Text, View, ScrollView } from "react-native";
 import { useRouter } from "expo-router";
 import { useHeaderHeight } from "@react-navigation/elements";
 import Loading from "@/components/Loading";
@@ -16,9 +11,9 @@ import CustomBottomSheet from "@/components/CustomBottomSheet";
 
 export default function Home() {
   const router = useRouter();
-  const { exercises, userDoc, loading } = useFetchDB();
   const headerHeight = useHeaderHeight();
   const [isModalVisible, setModalVisible] = useState(false);
+  const { exercises, userDoc, loading } = useFetchDB();
   const bottomSheetRef = useRef<BottomSheet>(null);
 
   const currentDate = new Date().toISOString().split("T")[0];
@@ -55,7 +50,9 @@ export default function Home() {
     <GestureHandlerRootView style={{ flex: 1 }}>
       <ScrollView contentContainerStyle={{ paddingTop: headerHeight, flex: 1 }}>
         <View className="gap-y-2 justify-center m-3">
-          <Text className="text-lg">{currentDayName}</Text>
+          <Text className="text-3xl font-bold mb-3 text-black">
+            {currentDayName}
+          </Text>
 
           <View className="w-full rounded-md p-3 border-b-2 border-r-2 overflow-hidden relative bg-white">
             <Text className="text-2xl">Hi, buddy!</Text>
@@ -108,4 +105,3 @@ export default function Home() {
     </GestureHandlerRootView>
   );
 }
-

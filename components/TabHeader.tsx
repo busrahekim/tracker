@@ -2,11 +2,7 @@ import { View, Text, TouchableOpacity, TextInput } from "react-native";
 import React from "react";
 import { BlurView } from "expo-blur";
 import { Link } from "expo-router";
-import {
-  Fontisto,
-  Ionicons,
-  MaterialCommunityIcons,
-} from "@expo/vector-icons";
+import { Fontisto, Ionicons, MaterialCommunityIcons } from "@expo/vector-icons";
 import Colors from "@/constants/Colors";
 import { useSafeAreaInsets } from "react-native-safe-area-context";
 import { useFetchDB } from "@/hooks/useFetchDB";
@@ -14,7 +10,6 @@ import { useFetchDB } from "@/hooks/useFetchDB";
 const TabHeader = () => {
   const { top } = useSafeAreaInsets();
   const { userDoc } = useFetchDB();
-  
 
   const firstLetterOfName = userDoc?.name.charAt(0) || "";
 
@@ -44,17 +39,20 @@ const TabHeader = () => {
             placeholderTextColor={Colors.dark}
           />
         </View>
-        <View className="rounded-full bg-lightGray w-10 h-10 justify-center items-center">
-          <Fontisto name="history" size={20} color={Colors.dark} />
-        </View>
-        <View className="rounded-full bg-lightGray w-10 h-10 justify-center items-center">
+        <Link href="/modal" asChild>
+          <TouchableOpacity className="rounded-full bg-lightGray w-10 h-10 justify-center items-center">
+            <Fontisto name="history" size={20} color={Colors.dark} />
+          </TouchableOpacity>
+        </Link>
+
+        <TouchableOpacity className="rounded-full bg-lightGray w-10 h-10 justify-center items-center">
           {/* <Ionicons name={"card"} size={20} color={Colors.dark} /> */}
           <MaterialCommunityIcons
             name="view-gallery-outline"
             size={20}
             color={Colors.dark}
           />
-        </View>
+        </TouchableOpacity>
       </View>
     </BlurView>
   );
