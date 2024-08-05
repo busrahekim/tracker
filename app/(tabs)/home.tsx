@@ -3,31 +3,27 @@ import { useRouter } from "expo-router";
 import { useHeaderHeight } from "@react-navigation/elements";
 import Loading from "@/components/Loading";
 import Ribbon from "@/components/Ribbon";
-import { useFetchDB } from "@/hooks/useFetchDB";
+// import { useFetchDB } from "@/hooks/useFetchDB";
 import { useRef, useState } from "react";
 import BottomSheet from "@gorhom/bottom-sheet";
 import { GestureHandlerRootView } from "react-native-gesture-handler";
 import CustomBottomSheet from "@/components/CustomBottomSheet";
 import ScheduledWorkoutView from "@/components/ScheduledWorkoutView";
+import { useData } from "@/context/DataContext";
 
 export default function Home() {
   const router = useRouter();
   const headerHeight = useHeaderHeight();
   const [isModalVisible, setModalVisible] = useState(false);
-  const { exercises, userDoc, loading } = useFetchDB();
+  // const { exercises, userDoc, loading } = useFetchDB();
   const bottomSheetRef = useRef<BottomSheet>(null);
 
-  const currentDate = new Date().toISOString().split("T")[0];
+  const { userDoc, loading } =
+    useData();
+
   const currentDayName = new Date().toLocaleDateString("en-GB", {
     weekday: "long",
   });
-
-  const currentWorkout =
-    userDoc?.schedule?.[currentDate] || "No planned workout for today";
-
-  const currentExercises =
-    exercises?.find((workout) => workout.day === currentWorkout)?.exercises ||
-    [];
 
   const showModal = () => {
     setModalVisible(true);
@@ -95,8 +91,6 @@ export default function Home() {
         </View>
         <View className="flex-1">
           <ScheduledWorkoutView
-            currentWorkout={currentWorkout}
-            currentExercises={currentExercises}
             showModal={showModal}
           />
         </View>
@@ -106,8 +100,6 @@ export default function Home() {
             ref={bottomSheetRef}
             isVisible={isModalVisible}
             onClose={hideModal}
-            currentWorkout={currentWorkout}
-            currentExercises={currentExercises}
           />
         )}
       </ScrollView>

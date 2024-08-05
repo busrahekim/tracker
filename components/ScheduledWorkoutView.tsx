@@ -6,18 +6,17 @@ import {
   SimpleLineIcons,
 } from "@expo/vector-icons";
 import Colors from "@/constants/Colors";
+import { useData } from "@/context/DataContext";
 
 interface ScheduledWorkoutViewProps {
-  currentWorkout: string;
   showModal: () => void;
-  currentExercises: string[];
 }
 
 const ScheduledWorkoutView = ({
-  currentWorkout,
   showModal,
-  currentExercises,
 }: ScheduledWorkoutViewProps) => {
+  const { currentExercises, currentWorkout } = useData();
+
   return (
     <View className="bg-primary rounded-md items-center m-3 p-4">
       <View className="flex-row items-center justify-between w-full gap-2">

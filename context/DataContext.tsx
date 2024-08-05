@@ -1,28 +1,58 @@
 import { useFetchDB } from "@/hooks/useFetchDB";
-import { createContext, ReactNode, useContext } from "react";
+import { createContext, ReactNode, useContext, useMemo } from "react";
 
-//wrap layout
 
 interface DataContextType {
   userDoc: any;
   stepsData: any;
-  exercises: any;
+  exercises: any[] | undefined;
   loading: boolean;
   error: any;
+  currentWorkout: string;
+  currentExercises: string[];
 }
 
-export const DataContext = createContext<DataContextType | undefined>(
-  undefined
-);
+export const DataContext = createContext<DataContextType>({
+  userDoc: null,
+  stepsData: null,
+  exercises: [],
+  loading: true,
+  error: null,
+  currentWorkout: "",
+  currentExercises: []
 
-export const DataContextProvider = ({ children }: { children: ReactNode }) => {
+});
+
+interface DataProviderProps {
+  children: ReactNode;
+}
+
+export const DataProvider = ({ children }: DataProviderProps) => {
   const { userDoc, stepsData, exercises, loading, error } = useFetchDB();
+
+  const currentDate = new Date().toISOString().split("T")[0];
+  const currentWorkout =
+    userDoc?.schedule?.[currentDate] || "No planned workout for today";
+
+  const currentExercises =
+    exercises?.find((workout) => workout.day === currentWorkout)?.exercises ||
+    [];
+
+  // Memoize the context value to prevent unnecessary re-renders
+  const contextValue = useMemo(
+    () => ({
+      userDoc,
+      stepsData,
+      exercises,
+      loading,
+      error,
+      currentWorkout,
+      currentExercises,
+    }),
+    [exercises, userDoc, loading, currentWorkout, currentExercises]
+  );
   return (
-    <DataContext.Provider
-      value={{ userDoc, stepsData, exercises, loading, error }}
-    >
-      {children}
-    </DataContext.Provider>
+    <DataContext.Provider value={contextValue}>{children}</DataContext.Provider>
   );
 };
 

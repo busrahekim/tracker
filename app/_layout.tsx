@@ -1,5 +1,6 @@
 import Loading from "@/components/Loading";
 import { AuthProvider } from "@/context/AuthContext";
+import { DataProvider } from "@/context/DataContext";
 import { UserInactivityProvider } from "@/context/UserInactivity";
 import FontAwesome from "@expo/vector-icons/FontAwesome";
 import {
@@ -106,9 +107,11 @@ const RootLayoutNav = () => {
         <SafeAreaProvider>
           <AuthProvider>
             <QueryClientProvider client={queryClient}>
-              <UserInactivityProvider>
-                <RootLayout />
-              </UserInactivityProvider>
+              <DataProvider>
+                <UserInactivityProvider>
+                  <RootLayout />
+                </UserInactivityProvider>
+              </DataProvider>
             </QueryClientProvider>
           </AuthProvider>
         </SafeAreaProvider>
