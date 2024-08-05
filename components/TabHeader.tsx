@@ -19,7 +19,7 @@ const TabHeader = () => {
     <BlurView intensity={80} tint={"extraLight"} style={{ paddingTop: top }}>
       <View className="flex flex-row items-center justify-around gap-2 mx-2">
         <Link href={"/(tabs)/profile" as `${string}:${string}`} asChild>
-          <TouchableOpacity className="rounded-full bg-gray w-10 h-10 justify-center items-center">
+          <TouchableOpacity className="rounded-full bg-primary w-10 h-10 justify-center items-center">
             <Text className="text-white font-medium text-lg">
               {firstLetterOfName}
             </Text>

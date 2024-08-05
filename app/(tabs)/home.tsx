@@ -8,6 +8,7 @@ import { useRef, useState } from "react";
 import BottomSheet from "@gorhom/bottom-sheet";
 import { GestureHandlerRootView } from "react-native-gesture-handler";
 import CustomBottomSheet from "@/components/CustomBottomSheet";
+import ScheduledWorkoutView from "@/components/ScheduledWorkoutView";
 
 export default function Home() {
   const router = useRouter();
@@ -59,9 +60,9 @@ export default function Home() {
             {userDoc?.workoutPlan ? (
               <>
                 <Text className="text-lg">Ready to hit some PR's?</Text>
-                <TouchableOpacity onPress={handleClick}>
+                {/* <TouchableOpacity onPress={handleClick}>
                   <Text>add</Text>
-                </TouchableOpacity>
+                </TouchableOpacity> */}
               </>
             ) : (
               <>
@@ -82,14 +83,22 @@ export default function Home() {
 
             <Ribbon />
           </View>
-          <View className="">
+          {/* <View className="">
             <TouchableOpacity
               onPress={showModal}
               className="w-full rounded-md p-3 border-b-2 border-r-2 overflow-hidden relative bg-primary"
             >
               <Text className="text-xl text-white">{currentWorkout}</Text>
             </TouchableOpacity>
-          </View>
+           
+          </View> */}
+        </View>
+        <View className="flex-1">
+          <ScheduledWorkoutView
+            currentWorkout={currentWorkout}
+            currentExercises={currentExercises}
+            showModal={showModal}
+          />
         </View>
         {/* Bottom Sheet */}
         {isModalVisible && (

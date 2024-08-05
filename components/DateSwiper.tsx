@@ -36,7 +36,7 @@ const DateSwiper = () => {
     }, 100);
   };
 
-  console.log(selectedDate.toISOString().split("T")[0]);
+//   console.log(selectedDate.toISOString().split("T")[0]);
   
 
   return (
