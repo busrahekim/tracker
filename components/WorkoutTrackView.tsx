@@ -4,62 +4,97 @@ import { useData } from "@/context/DataContext";
 import { MaterialIcons } from "@expo/vector-icons";
 import Colors from "@/constants/Colors";
 import * as ImagePicker from "expo-image-picker";
+import CustomizedDialog from "./CustomizedDialogPanel";
 
 const WorkoutTrackView = () => {
   const { currentExercises, currentWorkout } = useData();
   const [photoUris, setPhotoUris] = useState<string[]>(Array(3).fill(""));
+  const [dialogVisible, setDialogVisible] = useState(false);
+  const [selectedIndex, setSelectedIndex] = useState<number | null>(null);
 
-  const pickImage = async (index: number) => {
-    Alert.alert(
-      "Select Image",
-      "Choose an option",
-      [
-        {
-          text: "Take Photo",
-          onPress: () => takePhoto(index),
-        },
-        {
-          text: "Choose from Gallery",
-          onPress: () => chooseFromGallery(index),
-        },
-        {
-          text: "Cancel",
-          style: "cancel",
-        },
-      ],
-      { cancelable: true }
-    );
-  };  
-
-  const takePhoto = async (index: number) => {
-    let result = await ImagePicker.launchCameraAsync({
-      allowsEditing: true,
-      aspect: [4, 3],
-      quality: 1,
-    });
-
-    if (!result.canceled) {
-      setPhotoUris((prevUris) =>
-        prevUris.map((uri, i) => (i === index ? result.assets[0].uri : uri))
-      );
-    }
+  const openDialog = (index: number) => {
+    setSelectedIndex(index);
+    setDialogVisible(true);
   };
 
-  const chooseFromGallery = async (index: number) => {
-    let result = await ImagePicker.launchImageLibraryAsync({
-      mediaTypes: ImagePicker.MediaTypeOptions.Images,
-      allowsEditing: true,
-      aspect: [4, 3],
-      quality: 1,
-    });
+  const closeDialog = () => setDialogVisible(false);
 
-    console.log(result);
+  const chooseFromGallery = async () => {
+    if (selectedIndex === null) return;
 
-    if (!result.canceled) {
-      setPhotoUris((prevUris) =>
-        prevUris.map((uri, i) => (i === index ? result.assets[0].uri : uri))
+    try {
+      // Request media library permissions
+      const { status } =
+        await ImagePicker.requestMediaLibraryPermissionsAsync();
+      if (status !== "granted") {
+        Alert.alert(
+          "Permission Required",
+          "You need to grant permissions to access the photo library."
+        );
+        return;
+      }
+
+      // Launch image picker
+      let result = await ImagePicker.launchImageLibraryAsync({
+        mediaTypes: ImagePicker.MediaTypeOptions.Images,
+        allowsEditing: true,
+        aspect: [4, 3],
+        quality: 1,
+      });
+
+      if (!result.canceled) {
+        setPhotoUris((prevUris) =>
+          prevUris.map((uri, i) =>
+            i === selectedIndex ? result.assets[0].uri : uri
+          )
+        );
+      }
+    } catch (error) {
+      console.error("Error choosing from gallery:", error);
+      Alert.alert(
+        "Error",
+        "An error occurred while choosing the image. Please try again."
       );
     }
+    closeDialog();
+  };
+  
+  const takePhoto = async () => {
+    if (selectedIndex === null) return;
+
+    try {
+      // Request camera permissions
+      const { status } = await ImagePicker.requestCameraPermissionsAsync();
+      if (status !== "granted") {
+        Alert.alert(
+          "Permission Required",
+          "You need to grant permissions to access the camera."
+        );
+        return;
+      }
+
+      // Launch camera
+      let result = await ImagePicker.launchCameraAsync({
+        allowsEditing: true,
+        aspect: [4, 3],
+        quality: 1,
+      });
+
+      if (!result.canceled) {
+        setPhotoUris((prevUris) =>
+          prevUris.map((uri, i) =>
+            i === selectedIndex ? result.assets[0].uri : uri
+          )
+        );
+      }
+    } catch (error) {
+      console.error("Error taking photo:", error);
+      Alert.alert(
+        "Error",
+        "An error occurred while taking the photo. Please try again."
+      );
+    }
+    closeDialog();
   };
 
   return (
@@ -70,7 +105,7 @@ const WorkoutTrackView = () => {
           <TouchableOpacity
             key={index}
             className="w-28 h-28 rounded-md bg-lightGray items-center justify-center"
-            onPress={() => pickImage(index)}
+            onPress={() => openDialog(index)}
           >
             {photoUri ? (
               <Image
@@ -90,7 +125,13 @@ const WorkoutTrackView = () => {
           </TouchableOpacity>
         ))}
       </View>
-
+      {/* Custom Dialog */}
+      <CustomizedDialog
+        visible={dialogVisible}
+        onDismiss={closeDialog}
+        onTakePhoto={takePhoto}
+        onChooseFromGallery={chooseFromGallery}
+      />
       {/* Exercise Inputs*/}
       {/* Finish Button*/}
     </View>

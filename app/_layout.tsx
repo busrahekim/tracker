@@ -16,6 +16,7 @@ import { getAuth, onAuthStateChanged } from "firebase/auth";
 import { useEffect } from "react";
 import { useColorScheme } from "react-native";
 import { GestureHandlerRootView } from "react-native-gesture-handler";
+import { PaperProvider } from "react-native-paper";
 import "react-native-reanimated";
 import { SafeAreaProvider } from "react-native-safe-area-context";
 
@@ -108,9 +109,11 @@ const RootLayoutNav = () => {
           <AuthProvider>
             <QueryClientProvider client={queryClient}>
               <DataProvider>
-                <UserInactivityProvider>
-                  <RootLayout />
-                </UserInactivityProvider>
+                <PaperProvider>
+                  <UserInactivityProvider>
+                    <RootLayout />
+                  </UserInactivityProvider>
+                </PaperProvider>
               </DataProvider>
             </QueryClientProvider>
           </AuthProvider>
