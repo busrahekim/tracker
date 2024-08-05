@@ -33,8 +33,15 @@
         "expo-dev-launcher",
         {
           "launchMode": "most-recent"
-        }
-      ]
+        } 
+      ],
+        [
+          "expo-image-picker",
+          {
+            "photosPermission": "The app accesses your photos."
+          }
+        ]
+     
     ],
     "experiments": {
       "typedRoutes": true

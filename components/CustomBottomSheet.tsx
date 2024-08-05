@@ -27,7 +27,9 @@ const CustomBottomSheet = forwardRef<BottomSheet, CustomBottomSheetProps>(
         handleStyle={styles.bottomSheetHandle}
       >
         <BottomSheetScrollView
-          contentContainerStyle={styles.bottomSheetContent}
+          contentContainerStyle={{
+            padding: 20,
+          }}
         >
           <Text className="text-xl font-bold uppercase">{currentWorkout}</Text>
           <WorkoutTrackView />
@@ -40,8 +42,11 @@ const CustomBottomSheet = forwardRef<BottomSheet, CustomBottomSheetProps>(
         ) : (
           <Text>No exercises for today.</Text>
         )} */}
-          <TouchableOpacity onPress={onClose} style={styles.closeButton}>
-            <Text style={styles.closeButtonText}>Close</Text>
+          <TouchableOpacity
+            onPress={onClose}
+            className="mt-5 bg-primary p-2 rounded-md"
+          >
+            <Text className="text-white text-center text-lg">Finish</Text>
           </TouchableOpacity>
         </BottomSheetScrollView>
       </BottomSheet>
@@ -60,19 +65,6 @@ const styles = StyleSheet.create({
     height: 25,
     borderTopLeftRadius: 40,
     borderTopRightRadius: 40,
-  },
-  bottomSheetContent: {
-    padding: 20,
-  },
-  closeButton: {
-    marginTop: 20,
-    backgroundColor: "#f00",
-    padding: 10,
-    borderRadius: 5,
-  },
-  closeButtonText: {
-    color: "#fff",
-    textAlign: "center",
   },
 });
 
