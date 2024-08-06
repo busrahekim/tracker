@@ -1,7 +1,6 @@
 import { Text, StyleSheet, TouchableOpacity, View } from "react-native";
 import React, { forwardRef } from "react";
 import BottomSheet, {
-  BottomSheetBackdrop,
   BottomSheetScrollView,
 } from "@gorhom/bottom-sheet";
 import WorkoutTrackView from "./WorkoutTrackView";
@@ -19,17 +18,6 @@ const CustomBottomSheet = forwardRef<BottomSheet, CustomBottomSheetProps>(
 
     const { currentWorkout } = useData();
 
-    // not working :(
-    const renderBackdrop = (props: any) => (
-      <BottomSheetBackdrop
-        {...props}
-        disappearsOnIndex={1}
-        appearsOnIndex={2}
-        opacity={0.5} // Adjust the opacity as needed
-        style={{ backgroundColor: "rgba(0, 0, 0, 0.5)" }} // Semi-transparent black
-      />
-    );
-
     return (
       <BottomSheet
         ref={ref}
@@ -39,7 +27,7 @@ const CustomBottomSheet = forwardRef<BottomSheet, CustomBottomSheetProps>(
         enablePanDownToClose={true} // Enable this prop to allow closing
         backgroundStyle={styles.bottomSheetBackground}
         handleStyle={styles.bottomSheetHandle}
-        backdropComponent={renderBackdrop}
+        style={{zIndex: 2}}
       >
         <BottomSheetScrollView
           contentContainerStyle={{
