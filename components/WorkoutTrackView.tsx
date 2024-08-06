@@ -1,31 +1,45 @@
-import {
-  View,
-  Text,
-  TouchableOpacity,
-  Image,
-  Alert,
-  TextInput,
-  KeyboardAvoidingView,
-} from "react-native";
+import { View, Text, TouchableOpacity, Image, Alert } from "react-native";
 import React, { useState } from "react";
 import { useData } from "@/context/DataContext";
 import { MaterialIcons } from "@expo/vector-icons";
 import Colors from "@/constants/Colors";
 import * as ImagePicker from "expo-image-picker";
 import CustomizedDialog from "./CustomizedDialogPanel";
+import WorkoutDialogPanel from "./WorkoutDialogPanel";
+
 
 const WorkoutTrackView = () => {
-  const { currentExercises, currentWorkout } = useData();
+  const { currentExercises } = useData();
   const [photoUris, setPhotoUris] = useState<string[]>(Array(3).fill(""));
-  const [dialogVisible, setDialogVisible] = useState(false);
+  const [imageSourceDialogVisible, setImageSourceDialogVisible] =
+    useState(false);
+  const [workoutDialog, setWorkoutDialog] = useState(false);
   const [selectedIndex, setSelectedIndex] = useState<number | null>(null);
+
+  const [exerciseSets, setExerciseSets] = useState<{
+    [key: number]: Array<{ kg: string; rep: string }>;
+  }>({});
+
+  //interface SetData
+  const handleSaveSets = (sets: Array<{ kg: string; rep: string }>) => {
+    if (selectedIndex !== null) {
+      setExerciseSets((prev) => ({ ...prev, [selectedIndex]: sets }));
+    }
+    closeWorkoutDialog();
+  };
+
+  const openWorkoutDialog = (index: number) => {
+    setSelectedIndex(index);
+    setWorkoutDialog(true);
+  };
+
+  const closeDialog = () => setImageSourceDialogVisible(false);
+  const closeWorkoutDialog = () => setWorkoutDialog(false);
 
   const openDialog = (index: number) => {
     setSelectedIndex(index);
-    setDialogVisible(true);
+    setImageSourceDialogVisible(true);
   };
-
-  const closeDialog = () => setDialogVisible(false);
 
   const chooseFromGallery = async () => {
     if (selectedIndex === null) return;
@@ -137,27 +151,12 @@ const WorkoutTrackView = () => {
       <View className="flex-row gap-2 flex-wrap">
         {currentExercises.length > 0 ? (
           currentExercises.map((exercise: string, exerciseIndex: number) => (
-            <TouchableOpacity key={exerciseIndex} className="mt-2 bg-primary rounded-full p-3 items-center">
+            <TouchableOpacity
+              key={exerciseIndex}
+              className="mt-2 bg-primary rounded-full p-3 items-center"
+              onPress={() => openWorkoutDialog(exerciseIndex)}
+            >
               <Text className="text-lg text-white">{exercise}</Text>
-
-              {/* Add two sets of inputs for each,z exercise */}
-              {/* {[1, 2].map((setIndex) => (
-                <View
-                  key={setIndex}
-                  className="flex flex-row justify-around gap-2 items-center mt-2"
-                >
-                  <TextInput
-                    className="flex-1 bg-lightGray rounded p-1"
-                    placeholder={`Set ${setIndex} - kg`}
-                    placeholderTextColor={Colors.dark}
-                  />
-                  <TextInput
-                    className="flex-1 bg-lightGray rounded p-1"
-                    placeholder={`Set ${setIndex} - reps`}
-                    placeholderTextColor={Colors.dark}
-                  />
-                </View>
-              ))} */}
             </TouchableOpacity>
           ))
         ) : (
@@ -167,11 +166,21 @@ const WorkoutTrackView = () => {
 
       {/* Custom Dialog */}
       <CustomizedDialog
-        visible={dialogVisible}
+        visible={imageSourceDialogVisible}
         onDismiss={closeDialog}
         onTakePhoto={takePhoto}
         onChooseFromGallery={chooseFromGallery}
       />
+
+      {selectedIndex !== null && (
+        <WorkoutDialogPanel
+          visible={workoutDialog}
+          onDismiss={closeWorkoutDialog}
+          exerciseTitle={currentExercises[selectedIndex]}
+          initialSets={exerciseSets[selectedIndex] || []}
+          onSaveSets={handleSaveSets}
+        />
+      )}
       {/* Exercise Inputs*/}
       {/* Finish Button*/}
     </View>
