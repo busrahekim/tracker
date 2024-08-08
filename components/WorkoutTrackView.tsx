@@ -1,23 +1,31 @@
-import { View, Text, TouchableOpacity, Image, Alert, Button } from "react-native";
+import {
+  View,
+  Text,
+  TouchableOpacity,
+  Image,
+  Alert,
+} from "react-native";
 import React, { useState } from "react";
 import { MaterialIcons } from "@expo/vector-icons";
 import Colors from "@/constants/Colors";
 import * as ImagePicker from "expo-image-picker";
 import CustomizedDialog from "./CustomizedDialogPanel";
 import WorkoutDialogPanel from "./WorkoutDialogPanel";
-import { useSaveWorkoutData } from "@/hooks/useSaveWorkoutData";
 import { useCombinedWorkoutData } from "@/context/CombinedWorkoutDataContext";
 
-
 const WorkoutTrackView = () => {
-  const { exerciseSets, setExerciseSets, uploadedPhotos, setUploadedPhotos, currentExercises } =
-  useCombinedWorkoutData();
+  const {
+    exerciseSets,
+    setExerciseSets,
+    uploadedPhotos,
+    setUploadedPhotos,
+    currentExercises,
+  } = useCombinedWorkoutData();
   const [imageSourceDialogVisible, setImageSourceDialogVisible] =
     useState(false);
   const [workoutDialog, setWorkoutDialog] = useState(false);
   const [selectedIndex, setSelectedIndex] = useState<number | null>(null);
 
-  
   const handleSaveSets = (sets: Array<{ kg: string; rep: string }>) => {
     if (selectedIndex !== null) {
       setExerciseSets({ ...exerciseSets, [selectedIndex]: sets });
@@ -40,7 +48,7 @@ const WorkoutTrackView = () => {
 
   const chooseFromGallery = async () => {
     if (selectedIndex === null) return;
-  
+
     try {
       // Request media library permissions
       const { status } =
@@ -52,7 +60,7 @@ const WorkoutTrackView = () => {
         );
         return;
       }
-  
+
       // Launch image picker
       let result = await ImagePicker.launchImageLibraryAsync({
         mediaTypes: ImagePicker.MediaTypeOptions.Images,
@@ -60,7 +68,7 @@ const WorkoutTrackView = () => {
         aspect: [4, 3],
         quality: 1,
       });
-  
+
       if (!result.canceled) {
         // Create the new array with the updated photo URI
         const updatedUris = uploadedPhotos.map((uri, i) =>
@@ -77,47 +85,43 @@ const WorkoutTrackView = () => {
     }
     closeDialog();
   };
-  
 
   const takePhoto = async () => {
-    // if (selectedIndex === null) return;
+    if (selectedIndex === null) return;
 
-    // try {
-    //   // Request camera permissions
-    //   const { status } = await ImagePicker.requestCameraPermissionsAsync();
-    //   if (status !== "granted") {
-    //     Alert.alert(
-    //       "Permission Required",
-    //       "You need to grant permissions to access the camera."
-    //     );
-    //     return;
-    //   }
+    try {
+      // Request camera permissions
+      const { status } = await ImagePicker.requestCameraPermissionsAsync();
+      if (status !== "granted") {
+        Alert.alert(
+          "Permission Required",
+          "You need to grant permissions to access the camera."
+        );
+        return;
+      }
 
-    //   // Launch camera
-    //   let result = await ImagePicker.launchCameraAsync({
-    //     allowsEditing: true,
-    //     aspect: [4, 3],
-    //     quality: 1,
-    //   });
+      // Launch camera
+      let result = await ImagePicker.launchCameraAsync({
+        allowsEditing: true,
+        aspect: [4, 3],
+        quality: 1,
+      });
 
-    //   if (!result.canceled) {
-    //     setPhotoUris((prevUris) =>
-    //       prevUris.map((uri, i) =>
-    //         i === selectedIndex ? result.assets[0].uri : uri
-    //       )
-    //     );
-    //   }
-    // } catch (error) {
-    //   console.error("Error taking photo:", error);
-    //   Alert.alert(
-    //     "Error",
-    //     "An error occurred while taking the photo. Please try again."
-    //   );
-    // }
-    // closeDialog();
+      if (!result.canceled) {
+        const updatedUris = uploadedPhotos.map((uri, i) =>
+          i === selectedIndex ? result.assets[0].uri : uri
+        );
+        setUploadedPhotos(updatedUris);
+      }
+    } catch (error) {
+      console.error("Error taking photo:", error);
+      Alert.alert(
+        "Error",
+        "An error occurred while taking the photo. Please try again."
+      );
+    }
+    closeDialog();
   };
-
-
 
   return (
     <View className="mt-2 gap-y-3">
@@ -181,9 +185,6 @@ const WorkoutTrackView = () => {
           onSaveSets={handleSaveSets}
         />
       )}
-      {/* Exercise Inputs*/}
-      {/* Finish Button*/}
-      {/* <Button onPress={finishWorkout} title="Finish Workout" /> */}
     </View>
   );
 };
