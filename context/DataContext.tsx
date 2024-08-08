@@ -2,6 +2,8 @@ import { useFetchDB } from "@/hooks/useFetchDB";
 import { createContext, ReactNode, useContext, useMemo } from "react";
 
 
+//This context handles user data, onboarding steps, exercises, current workout & exercises information, error and loading state.
+
 interface DataContextType {
   userDoc: any;
   stepsData: any;

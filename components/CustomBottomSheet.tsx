@@ -4,7 +4,8 @@ import BottomSheet, {
   BottomSheetScrollView,
 } from "@gorhom/bottom-sheet";
 import WorkoutTrackView from "./WorkoutTrackView";
-import { useData } from "@/context/DataContext";
+import { useSaveWorkoutData } from "@/hooks/useSaveWorkoutData";
+import { useCombinedWorkoutData } from "@/context/CombinedWorkoutDataContext";
 
 interface CustomBottomSheetProps {
   isVisible: boolean;
@@ -16,7 +17,15 @@ const CustomBottomSheet = forwardRef<BottomSheet, CustomBottomSheetProps>(
   ({ isVisible, onClose }, ref) => {
     if (!isVisible) return null;
 
-    const { currentWorkout } = useData();
+    const { currentWorkout } = useCombinedWorkoutData();
+    const { saveWorkoutData } = useSaveWorkoutData();
+
+    const handleFinish = () => {
+      const currentDate = new Date().toISOString().split("T")[0];
+      saveWorkoutData(currentDate);
+      onClose();
+    };
+
 
     return (
       <BottomSheet
@@ -39,7 +48,7 @@ const CustomBottomSheet = forwardRef<BottomSheet, CustomBottomSheetProps>(
               {currentWorkout}
             </Text>
             <TouchableOpacity
-              onPress={onClose}
+              onPress={handleFinish}
               className=""
             >
               <Text className="text-primary font-bold text-center text-lg">Finish</Text>

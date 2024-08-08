@@ -8,6 +8,8 @@ import React, {
 import { getAuth, onAuthStateChanged, User } from "firebase/auth";
 import { FIREBASE_APP } from "@/firebaseConfig";
 
+//This context manages authentication state
+
 const auth = getAuth(FIREBASE_APP);
 
 interface AuthContextType {

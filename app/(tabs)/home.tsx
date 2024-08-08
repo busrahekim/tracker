@@ -8,7 +8,7 @@ import BottomSheet from "@gorhom/bottom-sheet";
 import { GestureHandlerRootView } from "react-native-gesture-handler";
 import CustomBottomSheet from "@/components/CustomBottomSheet";
 import ScheduledWorkoutView from "@/components/ScheduledWorkoutView";
-import { useData } from "@/context/DataContext";
+import { useCombinedWorkoutData } from "@/context/CombinedWorkoutDataContext";
 
 export default function Home() {
   const router = useRouter();
@@ -16,7 +16,7 @@ export default function Home() {
   const [isModalVisible, setModalVisible] = useState(false);
   const bottomSheetRef = useRef<BottomSheet>(null);
 
-  const { userDoc, loading, currentWorkout } = useData();
+  const { userDoc, loading, currentWorkout } = useCombinedWorkoutData();
 
   const currentDayName = new Date().toLocaleDateString("en-GB", {
     weekday: "long",

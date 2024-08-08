@@ -1,7 +1,9 @@
 import Loading from "@/components/Loading";
 import { AuthProvider } from "@/context/AuthContext";
+import { CombinedWorkoutDataProvider } from "@/context/CombinedWorkoutDataContext";
 import { DataProvider } from "@/context/DataContext";
 import { UserInactivityProvider } from "@/context/UserInactivity";
+import { WorkoutTrackProvider } from "@/context/WorkoutTrackContext";
 import FontAwesome from "@expo/vector-icons/FontAwesome";
 import {
   DarkTheme,
@@ -108,13 +110,13 @@ const RootLayoutNav = () => {
         <SafeAreaProvider>
           <AuthProvider>
             <QueryClientProvider client={queryClient}>
-              <DataProvider>
+              <CombinedWorkoutDataProvider>
                 <PaperProvider>
-                  <UserInactivityProvider>
-                    <RootLayout />
-                  </UserInactivityProvider>
+                    <UserInactivityProvider>
+                      <RootLayout />
+                    </UserInactivityProvider>
                 </PaperProvider>
-              </DataProvider>
+              </CombinedWorkoutDataProvider>
             </QueryClientProvider>
           </AuthProvider>
         </SafeAreaProvider>

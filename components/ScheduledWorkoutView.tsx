@@ -6,14 +6,14 @@ import {
   SimpleLineIcons,
 } from "@expo/vector-icons";
 import Colors from "@/constants/Colors";
-import { useData } from "@/context/DataContext";
+import { useCombinedWorkoutData } from "@/context/CombinedWorkoutDataContext";
 
 interface ScheduledWorkoutViewProps {
   showModal: () => void;
 }
 
 const ScheduledWorkoutView = ({ showModal }: ScheduledWorkoutViewProps) => {
-  const { currentExercises, currentWorkout } = useData();
+  const { currentExercises, currentWorkout, currentWorkoutDescription } = useCombinedWorkoutData();
 
   return (
     <View className="flex-1">
@@ -29,7 +29,7 @@ const ScheduledWorkoutView = ({ showModal }: ScheduledWorkoutViewProps) => {
         </View>
 
         <Text className="text-lightGray text-lg my-2">
-          Chest & Shoulders & Triceps
+         {currentWorkoutDescription}
         </Text>
         <View className="flex flex-row items-center justify-around w-full">
           <View className="flex flex-row gap-1">
