@@ -1,10 +1,7 @@
+import { SetData, StepData } from "@/constants/Interfaces";
 import { useFetchDB } from "@/hooks/useFetchDB";
 import { createContext, ReactNode, useState, useMemo, useContext } from "react";
 
-interface SetData {
-  kg: string;
-  rep: string;
-}
 
 interface CombinedWorkoutDataContextType {
   exerciseSets: {
@@ -12,7 +9,7 @@ interface CombinedWorkoutDataContextType {
   };
   uploadedPhotos: string[];
   userDoc: any;
-  stepsData: any;
+  stepsData?: StepData[];
   exercises: any[] | undefined;
   loading: boolean;
   error: any;
@@ -28,7 +25,7 @@ export const CombinedWorkoutDataContext =
     exerciseSets: {},
     uploadedPhotos: [],
     userDoc: null,
-    stepsData: null,
+    stepsData: [],
     exercises: [],
     loading: true,
     error: null,

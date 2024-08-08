@@ -1,6 +1,6 @@
 import { View, Text, TouchableOpacity } from "react-native";
 import React, { useState } from "react";
-import { StepData } from "@/constants/Steps";
+import { StepData } from "@/constants/Interfaces";
 
 interface StepProps {
   step: number;

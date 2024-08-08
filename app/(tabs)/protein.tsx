@@ -3,9 +3,10 @@ import React from "react";
 import { BlurView } from "expo-blur";
 import Loading from "@/components/Loading";
 import { useFetchDB } from "@/hooks/useFetchDB";
+import { useCombinedWorkoutData } from "@/context/CombinedWorkoutDataContext";
 
 const Protein = () => {
-  const { userDoc, loading, error } = useFetchDB();
+  const { userDoc, loading, error } = useCombinedWorkoutData();
 
   if (loading) {
     return <Loading />;

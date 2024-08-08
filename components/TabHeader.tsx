@@ -6,10 +6,11 @@ import { Fontisto, Ionicons, MaterialCommunityIcons } from "@expo/vector-icons";
 import Colors from "@/constants/Colors";
 import { useSafeAreaInsets } from "react-native-safe-area-context";
 import { useFetchDB } from "@/hooks/useFetchDB";
+import { useCombinedWorkoutData } from "@/context/CombinedWorkoutDataContext";
 
 const TabHeader = () => {
   const { top } = useSafeAreaInsets();
-  const { userDoc } = useFetchDB();
+  const { userDoc } = useCombinedWorkoutData();
 
   const firstLetterOfName = userDoc?.name.charAt(0) || "";
 

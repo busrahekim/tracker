@@ -1,4 +1,4 @@
-import { StepData } from "@/constants/Steps";
+import { StepData } from "@/constants/Interfaces";
 import { FIRESTORE_DB } from "@/firebaseConfig";
 import { useQuery } from "@tanstack/react-query";
 import { collection, getDocs } from "firebase/firestore";

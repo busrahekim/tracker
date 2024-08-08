@@ -3,6 +3,7 @@ import { FIRESTORE_DB } from "@/firebaseConfig";
 import { getAuth } from "firebase/auth";
 import { useCombinedWorkoutData } from "@/context/CombinedWorkoutDataContext";
 
+//TODO:
 export const useSaveWorkoutData = () => {
   const { exerciseSets, uploadedPhotos } = useCombinedWorkoutData();
 

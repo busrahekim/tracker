@@ -1,19 +1,24 @@
-import { View, Text, ScrollView } from "react-native";
+import { View, Text, ScrollView, TouchableOpacity } from "react-native";
 import React from "react";
 import { useHeaderHeight } from "@react-navigation/elements";
 import { useFetchDB } from "@/hooks/useFetchDB";
 import Loading from "@/components/Loading";
+import { AntDesign } from "@expo/vector-icons";
+import Colors from "@/constants/Colors";
+import { useCombinedWorkoutData } from "@/context/CombinedWorkoutDataContext";
 
 const Workout = () => {
   const headerHeight = useHeaderHeight();
-  const { exercises, loading, error } = useFetchDB();
+  const { exercises, loading, error } = useCombinedWorkoutData();
+
+  const handleEdit = () => {};
 
   if (loading) {
     return <Loading />;
   }
 
   if (error) {
-    return <Text>{error.message}</Text>; 
+    return <Text>{error.message}</Text>;
   }
 
   return (
@@ -25,7 +30,16 @@ const Workout = () => {
     >
       {exercises && exercises.length > 0 ? (
         <>
-          <Text className="text-2xl">Current Workout Plan</Text>
+          <View className="flex-row items-center justify-between">
+            <Text className="text-2xl">Current Workout Plan</Text>
+            <TouchableOpacity
+              onPress={handleEdit}
+              className="rounded-full p-2 bg-primary"
+            >
+              <AntDesign name="edit" size={16} color={Colors.background} />
+            </TouchableOpacity>
+          </View>
+
           {exercises.map((workout) => (
             <View key={workout.day} className="gap-y-2 mt-2">
               <Text

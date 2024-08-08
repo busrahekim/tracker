@@ -3,7 +3,6 @@ import React, { useState } from "react";
 import { Fontisto, Ionicons } from "@expo/vector-icons";
 import { useRouter } from "expo-router";
 import Step from "@/components/Step";
-import { StepData } from "@/constants/Steps";
 import { FIRESTORE_DB } from "@/firebaseConfig";
 import { doc, setDoc } from "firebase/firestore";
 import { getAuth } from "firebase/auth";
@@ -11,6 +10,7 @@ import DateTimePicker from "@react-native-community/datetimepicker";
 import Colors from "@/constants/Colors";
 import Loading from "@/components/Loading";
 import { useFetchDB } from "@/hooks/useFetchDB";
+import { StepData } from "@/constants/Interfaces";
 
 const Onboarding = () => {
   const [currentStep, setCurrentStep] = useState(1);
@@ -47,51 +47,6 @@ const Onboarding = () => {
       setCurrentStep(currentStep - 1);
     }
   };
-
-  // const handleFinish = async () => {
-  //   const auth = getAuth();
-  //   const user = auth.currentUser;
-
-  //   if (!user) {
-  //     console.error("No authenticated user found!");
-  //     return;
-  //   }
-
-  //   if (!stepsData) {
-  //     console.error("Steps data is not available.");
-  //     return;
-  //   }
-
-  //   const userDocRef = doc(FIRESTORE_DB, "users", user.uid);
-  //   const formattedDate = selectedDate
-  //     ? selectedDate.toISOString().split("T")[0]
-  //     : "";
-
-  //   try {
-  //     await setDoc(
-  //       userDocRef,
-  //       {
-  //         workoutPlan:
-  //           stepsData[0]?.content.find(
-  //             (c) => c.contentId === selectedContent[1]
-  //           )?.title || "",
-  //         unit:
-  //           stepsData[1]?.content.find(
-  //             (c) => c.contentId === selectedContent[2]
-  //           )?.title || "",
-  //         frequency:
-  //           stepsData[2]?.content.find(
-  //             (c) => c.contentId === selectedContent[3]
-  //           )?.title || "",
-  //         startDate: formattedDate,
-  //       },
-  //       { merge: true }
-  //     );
-  //     router.replace("/(tabs)/home");
-  //   } catch (error) {
-  //     console.error("Error updating document: ", error);
-  //   }
-  // };
 
 
   const handleFinish = async () => {
