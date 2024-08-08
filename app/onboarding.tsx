@@ -99,17 +99,15 @@ const Onboarding = () => {
     }
   };
   
+  //TODO: adjust accordiing to workoutPlan & frequency
   const generateWorkoutSchedule = (startDate: string, workoutPlan: string, frequency: string) => {
     const schedule: { [date: string]: string } = {};
     const start = new Date(startDate);
-    const days = frequency === "6-days a week" ? 6 : 3; // Adjust based on frequency
-    
-    // Define workout days
     const workoutDays = ["Push", "Pull", "Leg", "Off"];
   
     let currentDate = start;
     let dayIndex = 0;
-    while (Object.keys(schedule).length < 30) { // Generate schedule for 30 days as an example
+    while (Object.keys(schedule).length < 30) { // Generate schedule for 30 days
       const dateString = currentDate.toISOString().split("T")[0];
       schedule[dateString] = workoutDays[dayIndex % workoutDays.length];
       currentDate.setDate(currentDate.getDate() + 1);
@@ -140,7 +138,7 @@ const Onboarding = () => {
             <View key={index} className="flex-1 mx-1">
               <View
                 className={`h-2 w-full rounded-full ${
-                  currentStep > index ? "bg-secondary" : "bg-lightGray"
+                  currentStep > index ? "bg-primary" : "bg-lightGray"
                 }`}
               />
             </View>
@@ -157,7 +155,7 @@ const Onboarding = () => {
       {currentStep === 4 ? (
         <>
           <TouchableOpacity onPress={() => setShowDatePicker(true)}>
-            <Fontisto name="date" size={24} color={Colors.dark} />
+            <Fontisto name="date" size={24} color={Colors.primary} />
           </TouchableOpacity>
           {showDatePicker && (
             <DateTimePicker
@@ -188,16 +186,16 @@ const Onboarding = () => {
       <View className="flex-row justify-between mt-4 w-3/4">
         {currentStep > 1 && (
           <TouchableOpacity onPress={handleBack} className="p-2">
-            <Ionicons name="arrow-back" size={24} color="blue" />
+            <Ionicons name="arrow-back" size={24} color={Colors.primary} />
           </TouchableOpacity>
         )}
         {currentStep < (stepsData?.length || 0) ? (
           <TouchableOpacity onPress={handleNext} className="p-2 ml-auto">
-            <Ionicons name="arrow-forward" size={24} color="blue" />
+            <Ionicons name="arrow-forward" size={24} color={Colors.primary} />
           </TouchableOpacity>
         ) : (
           <TouchableOpacity onPress={handleFinish} className="p-2 ml-auto">
-            <Text className="text-lg text-secondary font-bold">Finish</Text>
+            <Text className="text-lg text-primary font-bold">Finish</Text>
           </TouchableOpacity>
         )}
       </View>

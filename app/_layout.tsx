@@ -96,7 +96,10 @@ const RootLayout = () => {
           headerShown: false,
         }}
       />
-      <Stack.Screen name="modal" options={{ presentation: "modal" }} />
+      <Stack.Screen
+        name="modal"
+        options={{ presentation: "modal", title: "History" }}
+      />
     </Stack>
   );
 };
@@ -112,9 +115,9 @@ const RootLayoutNav = () => {
             <QueryClientProvider client={queryClient}>
               <CombinedWorkoutDataProvider>
                 <PaperProvider>
-                    <UserInactivityProvider>
-                      <RootLayout />
-                    </UserInactivityProvider>
+                  <UserInactivityProvider>
+                    <RootLayout />
+                  </UserInactivityProvider>
                 </PaperProvider>
               </CombinedWorkoutDataProvider>
             </QueryClientProvider>

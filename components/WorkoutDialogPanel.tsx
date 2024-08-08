@@ -2,6 +2,7 @@ import { Text, TextInput, TouchableOpacity, View } from "react-native";
 import React, { useEffect, useState } from "react";
 import { Dialog, Portal, Button as PaperButton } from "react-native-paper";
 import Colors from "@/constants/Colors";
+import { SetData } from "@/constants/Interfaces";
 
 interface WorkoutDialogProps {
   visible: boolean;
@@ -11,10 +12,6 @@ interface WorkoutDialogProps {
   onSaveSets: (sets: SetData[]) => void; 
 }
 
-interface SetData {
-  kg: string;
-  rep: string;
-}
 
 const WorkoutDialogPanel = ({
   visible,

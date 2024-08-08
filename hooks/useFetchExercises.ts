@@ -16,9 +16,6 @@ export const useFetchExercises = () => {
     exercisesSnapshot.forEach((doc) => {
       exercises.push(doc.data());
 
-      //   if (data.day === dayName) {
-      //     exercisesForDay = data.exercises;
-      //   }
     });
     return exercises;
   };
