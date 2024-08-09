@@ -1,9 +1,7 @@
 import Loading from "@/components/Loading";
 import { AuthProvider } from "@/context/AuthContext";
 import { CombinedWorkoutDataProvider } from "@/context/CombinedWorkoutDataContext";
-import { DataProvider } from "@/context/DataContext";
 import { UserInactivityProvider } from "@/context/UserInactivity";
-import { WorkoutTrackProvider } from "@/context/WorkoutTrackContext";
 import FontAwesome from "@expo/vector-icons/FontAwesome";
 import {
   DarkTheme,
@@ -99,6 +97,10 @@ const RootLayout = () => {
       <Stack.Screen
         name="modal"
         options={{ presentation: "modal", title: "History" }}
+      />
+       <Stack.Screen
+        name="gallery"
+        options={{ presentation: "modal", title: "Gallery" }}
       />
     </Stack>
   );

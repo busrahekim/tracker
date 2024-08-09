@@ -5,7 +5,6 @@ import { Link } from "expo-router";
 import { Fontisto, Ionicons, MaterialCommunityIcons } from "@expo/vector-icons";
 import Colors from "@/constants/Colors";
 import { useSafeAreaInsets } from "react-native-safe-area-context";
-import { useFetchDB } from "@/hooks/useFetchDB";
 import { useCombinedWorkoutData } from "@/context/CombinedWorkoutDataContext";
 
 const TabHeader = () => {
@@ -46,14 +45,16 @@ const TabHeader = () => {
           </TouchableOpacity>
         </Link>
 
-        <TouchableOpacity className="rounded-full bg-lightGray w-10 h-10 justify-center items-center">
-          {/* <Ionicons name={"card"} size={20} color={Colors.dark} /> */}
-          <MaterialCommunityIcons
-            name="view-gallery-outline"
-            size={20}
-            color={Colors.dark}
-          />
-        </TouchableOpacity>
+        <Link href="/gallery" asChild>
+          <TouchableOpacity className="rounded-full bg-lightGray w-10 h-10 justify-center items-center">
+            {/* <Ionicons name={"card"} size={20} color={Colors.dark} /> */}
+            <MaterialCommunityIcons
+              name="view-gallery-outline"
+              size={20}
+              color={Colors.dark}
+            />
+          </TouchableOpacity>
+        </Link>
       </View>
     </BlurView>
   );

@@ -1,18 +1,44 @@
 import React from "react";
-import { View, Text } from "react-native";
+import { View, Text, Image } from "react-native";
 
-const CardDeck = () => {
+interface CardDeckProps {
+  photos: { uri: string; date: string }[];
+}
+
+const CardDeck = ({ photos }: CardDeckProps) => {
+  // consider empty uris
+  const validPhotos = photos.filter((photo) => photo.uri.trim() !== "");
+
+  if (validPhotos.length === 0) {
+    return (
+      <View className="flex-1 justify-center items-center">
+        <Text>No photos available</Text>
+      </View>
+    );
+  }
+
+  const dateText = validPhotos[0].date;
   return (
     <View className="flex-1 justify-center items-center">
-      <View className="w-24 h-36 bg-background border rounded-md absolute justify-center items-center z-0 translate-x-0 translate-y-0">
-        <Text className="text-lg">Card 1</Text>
-      </View>
-      <View className="w-24 h-36 bg-background border rounded-md absolute justify-center items-center z-10 translate-x-5 translate-y-5">
-        <Text className="text-lg">Card 2</Text>
-      </View>
-      <View className="w-24 h-36 bg-background border rounded-md absolute justify-center items-center z-20 translate-x-10 translate-y-10">
-        <Text className="text-lg">Card 3</Text>
-      </View>
+      <Text className="text-lg text-primary mb-5">{dateText}</Text>
+      {validPhotos.map((photo, index) => (
+        <View
+          key={index}
+          className="w-24 h-36 items-center justify-center"
+          style={{
+            zIndex: (validPhotos.length - index) * 10, // Stacking
+            transform: [
+              { translateX: index * 10 }, // X offset
+              { translateY: index * -150 }, // Y offset
+            ],
+          }}
+        >
+          <Image
+            source={{ uri: photo.uri }}
+            className="w-24 h-36 object-cover rounded-md bg-background border"
+          />
+        </View>
+      ))}
     </View>
   );
 };

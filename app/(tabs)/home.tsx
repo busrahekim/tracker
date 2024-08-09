@@ -52,7 +52,7 @@ export default function Home() {
             </Text>
 
             {currentWorkout !== "Off" ? (
-              <>
+              <View>
                 <View className="w-full rounded-md p-3 border-b-2 border-r-2 overflow-hidden relative bg-white">
                   <Text className="text-2xl">Hi, buddy!</Text>
                   {userDoc?.workoutPlan ? (
@@ -78,7 +78,7 @@ export default function Home() {
                 </View>
                 {/* ScheduledWorkoutView */}
                 <ScheduledWorkoutView showModal={showModal} />
-              </>
+              </View>
             ) : (
               <View className="w-full rounded-md p-3 border-b-2 border-r-2 overflow-hidden relative bg-white">
                 <Text className="text-2xl">Hi, buddy!</Text>
