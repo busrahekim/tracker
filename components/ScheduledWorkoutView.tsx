@@ -19,6 +19,7 @@ const ScheduledWorkoutView = ({ showModal }: ScheduledWorkoutViewProps) => {
     currentWorkoutDescription,
     userDoc,
   } = useCombinedWorkoutData();
+
   const today = new Date().toISOString().split("T")[0];
 
   // Retrieve today's schedule entry from userDoc.schedule
@@ -34,9 +35,10 @@ const ScheduledWorkoutView = ({ showModal }: ScheduledWorkoutViewProps) => {
           <Text className="text-white text-xl">{currentWorkout} Day</Text>
           <TouchableOpacity
             onPress={showModal}
-            className="rounded-full px-3 py-2 bg-lightGray"
+            className={`rounded-full px-3 py-2 ${workoutStatus === "done" ? "bg-secondary" : "bg-lightGray"}`}
+            disabled={workoutStatus === "done"}
           >
-            <Text className="text-primary uppercase">
+            <Text className={` uppercase ${workoutStatus === "done" ? "text-white" : "text-primary"}`}>
               {workoutStatus === "done" ? "Done" : "Start"}
             </Text>
           </TouchableOpacity>
