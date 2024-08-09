@@ -6,6 +6,8 @@ import { AntDesign } from "@expo/vector-icons";
 import Colors from "@/constants/Colors";
 import { useCombinedWorkoutData } from "@/context/CombinedWorkoutDataContext";
 import WorkoutEditPanel from "@/components/DialogPanels/WorkoutEditPanel";
+import { FIRESTORE_DB } from "@/firebaseConfig";
+import { doc, updateDoc } from "firebase/firestore";
 
 const Workout = () => {
   const headerHeight = useHeaderHeight();
@@ -23,10 +25,24 @@ const Workout = () => {
     setSelectedDay((prevDay) => (prevDay === day ? null : day));
   };
 
-  const handleSaveWorkout = (workout: string, newExercises: string[]) => {
-    // TODO: save logic
-    console.log("Saved workout:", workout, newExercises);
-    setEditPanelVisible(false);
+  const handleSaveWorkout = async (workout: string, newExercises: string[]) => {    
+    try {
+      const workoutRef = doc(
+        FIRESTORE_DB,
+        "workoutPlans",
+        "PPL",
+        "exercises",
+        `${workout.toLowerCase()}Day`
+      );
+      await updateDoc(workoutRef, {
+        exercises: newExercises,
+      });
+
+      console.log("Saved workout:", workout, newExercises);
+      setEditPanelVisible(false);
+    } catch (error) {
+      console.error("Error saving workout:", error);
+    }
   };
 
   if (loading) {
