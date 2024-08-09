@@ -82,7 +82,6 @@ const Onboarding = () => {
     const schedule = generateWorkoutSchedule(
       formattedDate,
       contentTitles
-      // frequency
     );
 
     try {
@@ -95,7 +94,7 @@ const Onboarding = () => {
           )?.title || "",
           frequency,
           startDate: formattedDate,
-          schedule, // Save the generated schedule
+          schedule, 
         },
         { merge: true }
       );
