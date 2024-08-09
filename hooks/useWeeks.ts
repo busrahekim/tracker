@@ -1,10 +1,7 @@
+import { DateItem } from "@/constants/Interfaces";
 import moment from "moment";
 import { useMemo } from "react";
 
-interface DateItem {
-  weekday: string;
-  date: Date;
-}
 
 type Weeks = DateItem[][];
 

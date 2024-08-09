@@ -1,24 +1,12 @@
-import { SetData, StepData } from "@/constants/Interfaces";
+import {
+  CombinedWorkoutDataContextType,
+  SetData,
+} from "@/constants/Interfaces";
 import { useFetchDB } from "@/hooks/useFetchDB";
 import { createContext, ReactNode, useState, useMemo, useContext } from "react";
 
-
-interface CombinedWorkoutDataContextType {
-  exerciseSets: {
-    [key: number]: SetData[];
-  };
-  uploadedPhotos: string[];
-  userDoc: any;
-  stepsData?: StepData[];
-  exercises: any[] | undefined;
-  loading: boolean;
-  error: any;
-  currentWorkout: string;
-  currentExercises: string[];
-  currentWorkoutDescription: string;
-  setExerciseSets: (sets: { [key: number]: SetData[] }) => void;
-  setUploadedPhotos: (photos: string[]) => void;
-}
+//This context handles user data, onboarding steps, exercises, current workout & exercises information, error and loading state.
+//Manages exercise sets and uploaded photos, to track workout data
 
 export const CombinedWorkoutDataContext =
   createContext<CombinedWorkoutDataContextType>({
