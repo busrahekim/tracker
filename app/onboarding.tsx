@@ -10,7 +10,7 @@ import DateTimePicker from "@react-native-community/datetimepicker";
 import Colors from "@/constants/Colors";
 import Loading from "@/components/Loading";
 import { useFetchDB } from "@/hooks/useFetchDB";
-import { StepData } from "@/constants/Interfaces";
+import { SetData, StepData } from "@/constants/Interfaces";
 
 
 const Onboarding = () => {
@@ -49,26 +49,55 @@ const Onboarding = () => {
     }
   };
 
+  const generateWorkoutSchedule = (
+    startDate: string,
+    contentTitles: string[]
+  ) => {
+    const schedule: { [date: string]: { currentWorkout: string; exerciseSets: { [key: number]: SetData[] }; photoUris: string[]; status: string; } } = {};
+    const start = new Date(startDate);
+  
+    const workoutDays = contentTitles;
+    const workoutCycleLength = workoutDays.length;
+  
+    let currentDate = start;
+    let dayIndex = 0;
+  
+    while (Object.keys(schedule).length < 30) {
+      const dateString = currentDate.toISOString().split("T")[0];
+  
+      schedule[dateString] = {
+        currentWorkout: workoutDays[dayIndex % workoutCycleLength],
+        exerciseSets: {},  
+        photoUris: [],      
+        status: ""
+      };
+  
+      dayIndex += 1;
+      currentDate.setDate(currentDate.getDate() + 1);
+    }
+  
+    return schedule;
+  };
+  
   const handleFinish = async () => {
     const auth = getAuth();
     const user = auth.currentUser;
-
+  
     if (!user) {
       console.error("No authenticated user found!");
       return;
     }
-
+  
     if (!stepsData) {
       console.error("Steps data is not available.");
       return;
     }
-
+  
     const userDocRef = doc(FIRESTORE_DB, "users", user.uid);
     const formattedDate = selectedDate
       ? selectedDate.toISOString().split("T")[0]
       : "";
-
-    // Determine the workout plan and frequency
+  
     const selectedWorkoutPlan = stepsData[0]?.content.find(
       (c) => c.contentId === selectedContent[1]
     );
@@ -77,13 +106,12 @@ const Onboarding = () => {
     const frequency =
       stepsData[2]?.content.find((c) => c.contentId === selectedContent[3])
         ?.title || "";
-
-    // Generate workout schedule
+  
     const schedule = generateWorkoutSchedule(
       formattedDate,
       contentTitles
     );
-
+  
     try {
       await setDoc(
         userDocRef,
@@ -103,35 +131,7 @@ const Onboarding = () => {
       console.error("Error updating document: ", error);
     }
   };
-
-  const generateWorkoutSchedule = (
-    startDate: string,
-    contentTitles: string[]
-  ) => {
-    const schedule: { [date: string]: string } = {};
-    const start = new Date(startDate);
-
-    // Set the frequency based on the workout plan
-    const workoutDays = contentTitles;
-    const workoutCycleLength = workoutDays.length;
-
-    let currentDate = start;
-    let dayIndex = 0;
-
-    // Generate schedule based on workout plan
-    while (Object.keys(schedule).length < 30) {
-      // Generate schedule for 30 days
-      const dateString = currentDate.toISOString().split("T")[0];
-
-      // Assign workout day or off day from the contentTitles
-      schedule[dateString] = workoutDays[dayIndex % workoutCycleLength];
-
-      dayIndex += 1; // Move to the next day
-      currentDate.setDate(currentDate.getDate() + 1);
-    }
-
-    return schedule;
-  };
+  
 
   const handleSelect = (step: number, contentId: number) => {
     setSelectedContent({ ...selectedContent, [step]: contentId });

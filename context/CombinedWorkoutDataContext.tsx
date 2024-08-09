@@ -39,7 +39,7 @@ export const CombinedWorkoutDataProvider = ({
 
   const currentDate = new Date().toISOString().split("T")[0];
   const currentWorkout =
-    userDoc?.schedule?.[currentDate] || "No planned workout for today";
+    userDoc?.schedule?.[currentDate].currentWorkout || "No planned workout for today";
   const currentWorkoutDescription =
     exercises?.find((workout) => workout.day === currentWorkout)?.description ||
     [];

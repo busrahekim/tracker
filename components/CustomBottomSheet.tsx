@@ -1,8 +1,6 @@
 import { Text, StyleSheet, TouchableOpacity, View } from "react-native";
 import React, { forwardRef } from "react";
-import BottomSheet, {
-  BottomSheetScrollView,
-} from "@gorhom/bottom-sheet";
+import BottomSheet, { BottomSheetScrollView } from "@gorhom/bottom-sheet";
 import WorkoutTrackView from "./WorkoutTrackView";
 import { useSaveWorkoutData } from "@/hooks/useSaveWorkoutData";
 import { useCombinedWorkoutData } from "@/context/CombinedWorkoutDataContext";
@@ -22,10 +20,9 @@ const CustomBottomSheet = forwardRef<BottomSheet, CustomBottomSheetProps>(
 
     const handleFinish = () => {
       const currentDate = new Date().toISOString().split("T")[0];
-      saveWorkoutData(currentDate);
+      saveWorkoutData(currentDate, currentWorkout);
       onClose();
     };
-
 
     return (
       <BottomSheet
@@ -36,7 +33,7 @@ const CustomBottomSheet = forwardRef<BottomSheet, CustomBottomSheetProps>(
         enablePanDownToClose={true} // Enable this prop to allow closing
         backgroundStyle={styles.bottomSheetBackground}
         handleStyle={styles.bottomSheetHandle}
-        style={{zIndex: 2}}
+        style={{ zIndex: 2 }}
       >
         <BottomSheetScrollView
           contentContainerStyle={{
@@ -47,11 +44,10 @@ const CustomBottomSheet = forwardRef<BottomSheet, CustomBottomSheetProps>(
             <Text className="text-xl font-bold uppercase">
               {currentWorkout}
             </Text>
-            <TouchableOpacity
-              onPress={handleFinish}
-              className=""
-            >
-              <Text className="text-primary font-bold text-center text-lg">Finish</Text>
+            <TouchableOpacity onPress={handleFinish} className="">
+              <Text className="text-primary font-bold text-center text-lg">
+                Finish
+              </Text>
             </TouchableOpacity>
           </View>
 

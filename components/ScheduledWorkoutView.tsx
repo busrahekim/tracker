@@ -13,7 +13,19 @@ interface ScheduledWorkoutViewProps {
 }
 
 const ScheduledWorkoutView = ({ showModal }: ScheduledWorkoutViewProps) => {
-  const { currentExercises, currentWorkout, currentWorkoutDescription } = useCombinedWorkoutData();
+  const {
+    currentExercises,
+    currentWorkout,
+    currentWorkoutDescription,
+    userDoc,
+  } = useCombinedWorkoutData();
+  const today = new Date().toISOString().split("T")[0];
+
+  // Retrieve today's schedule entry from userDoc.schedule
+  const todaySchedule = userDoc.schedule ? userDoc.schedule[today] : undefined;
+
+  // Get today's workout status
+  const workoutStatus = todaySchedule ? todaySchedule.status : undefined;
 
   return (
     <View className="flex-1">
@@ -24,12 +36,14 @@ const ScheduledWorkoutView = ({ showModal }: ScheduledWorkoutViewProps) => {
             onPress={showModal}
             className="rounded-full px-3 py-2 bg-lightGray"
           >
-            <Text className="text-primary uppercase">Start</Text>
+            <Text className="text-primary uppercase">
+              {workoutStatus === "done" ? "Done" : "Start"}
+            </Text>
           </TouchableOpacity>
         </View>
 
         <Text className="text-lightGray text-lg my-2">
-         {currentWorkoutDescription}
+          {currentWorkoutDescription}
         </Text>
         <View className="flex flex-row items-center justify-around w-full">
           <View className="flex flex-row gap-1">

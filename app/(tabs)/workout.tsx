@@ -38,7 +38,6 @@ const Workout = () => {
         exercises: newExercises,
       });
 
-      console.log("Saved workout:", workout, newExercises);
       setEditPanelVisible(false);
     } catch (error) {
       console.error("Error saving workout:", error);
