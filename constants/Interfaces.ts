@@ -4,6 +4,7 @@ export interface Content {
   contentId: number;
   title: string;
   description: string;
+  contentTitles: string[];
 }
 
 export interface StepData {

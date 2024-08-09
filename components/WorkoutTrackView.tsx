@@ -1,16 +1,10 @@
-import {
-  View,
-  Text,
-  TouchableOpacity,
-  Image,
-  Alert,
-} from "react-native";
+import { View, Text, TouchableOpacity, Image, Alert } from "react-native";
 import React, { useState } from "react";
 import { MaterialIcons } from "@expo/vector-icons";
 import Colors from "@/constants/Colors";
 import * as ImagePicker from "expo-image-picker";
-import CustomizedDialog from "./CustomizedDialogPanel";
-import WorkoutDialogPanel from "./WorkoutDialogPanel";
+import CustomizedDialog from "./DialogPanels/CustomizedDialogPanel";
+import WorkoutDialogPanel from "./DialogPanels/WorkoutDialogPanel";
 import { useCombinedWorkoutData } from "@/context/CombinedWorkoutDataContext";
 
 const WorkoutTrackView = () => {

@@ -5,7 +5,7 @@ import Loading from "@/components/Loading";
 import { AntDesign } from "@expo/vector-icons";
 import Colors from "@/constants/Colors";
 import { useCombinedWorkoutData } from "@/context/CombinedWorkoutDataContext";
-import WorkoutEditPanel from "@/components/WorkoutEditPanel";
+import WorkoutEditPanel from "@/components/DialogPanels/WorkoutEditPanel";
 
 const Workout = () => {
   const headerHeight = useHeaderHeight();
@@ -40,8 +40,6 @@ const Workout = () => {
   const currentWorkout = exercises?.find(
     (workout) => workout.day === selectedDay
   );
-
-  console.log("1: ", currentWorkout);
 
   return (
     <ScrollView

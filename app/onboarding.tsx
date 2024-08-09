@@ -12,6 +12,7 @@ import Loading from "@/components/Loading";
 import { useFetchDB } from "@/hooks/useFetchDB";
 import { StepData } from "@/constants/Interfaces";
 
+
 const Onboarding = () => {
   const [currentStep, setCurrentStep] = useState(1);
   const [selectedContent, setSelectedContent] = useState<
@@ -48,37 +49,42 @@ const Onboarding = () => {
     }
   };
 
-
   const handleFinish = async () => {
     const auth = getAuth();
     const user = auth.currentUser;
-  
+
     if (!user) {
       console.error("No authenticated user found!");
       return;
     }
-  
+
     if (!stepsData) {
       console.error("Steps data is not available.");
       return;
     }
-  
+
     const userDocRef = doc(FIRESTORE_DB, "users", user.uid);
     const formattedDate = selectedDate
       ? selectedDate.toISOString().split("T")[0]
       : "";
-  
+
     // Determine the workout plan and frequency
-    const workoutPlan = stepsData[0]?.content.find(
+    const selectedWorkoutPlan = stepsData[0]?.content.find(
       (c) => c.contentId === selectedContent[1]
-    )?.title || "";
-    const frequency = stepsData[2]?.content.find(
-      (c) => c.contentId === selectedContent[3]
-    )?.title || "";
-  
+    );
+    const workoutPlan = selectedWorkoutPlan?.title || "";
+    const contentTitles = selectedWorkoutPlan?.contentTitles || [];
+    const frequency =
+      stepsData[2]?.content.find((c) => c.contentId === selectedContent[3])
+        ?.title || "";
+
     // Generate workout schedule
-    const schedule = generateWorkoutSchedule(formattedDate, workoutPlan, frequency);
-  
+    const schedule = generateWorkoutSchedule(
+      formattedDate,
+      contentTitles
+      // frequency
+    );
+
     try {
       await setDoc(
         userDocRef,
@@ -98,22 +104,33 @@ const Onboarding = () => {
       console.error("Error updating document: ", error);
     }
   };
-  
-  //TODO: adjust accordiing to workoutPlan & frequency
-  const generateWorkoutSchedule = (startDate: string, workoutPlan: string, frequency: string) => {
+
+  const generateWorkoutSchedule = (
+    startDate: string,
+    contentTitles: string[]
+  ) => {
     const schedule: { [date: string]: string } = {};
     const start = new Date(startDate);
-    const workoutDays = ["Push", "Pull", "Leg", "Off"];
-  
+
+    // Set the frequency based on the workout plan
+    const workoutDays = contentTitles;
+    const workoutCycleLength = workoutDays.length;
+
     let currentDate = start;
     let dayIndex = 0;
-    while (Object.keys(schedule).length < 30) { // Generate schedule for 30 days
+
+    // Generate schedule based on workout plan
+    while (Object.keys(schedule).length < 30) {
+      // Generate schedule for 30 days
       const dateString = currentDate.toISOString().split("T")[0];
-      schedule[dateString] = workoutDays[dayIndex % workoutDays.length];
+
+      // Assign workout day or off day from the contentTitles
+      schedule[dateString] = workoutDays[dayIndex % workoutCycleLength];
+
+      dayIndex += 1; // Move to the next day
       currentDate.setDate(currentDate.getDate() + 1);
-      dayIndex += 1;
     }
-    
+
     return schedule;
   };
 
@@ -152,10 +169,10 @@ const Onboarding = () => {
       </View>
 
       {/* Current Step Content */}
-      {currentStep === 4 ? (
+      {currentStep === 3 ? (
         <>
-          <TouchableOpacity onPress={() => setShowDatePicker(true)}>
-            <Fontisto name="date" size={24} color={Colors.primary} />
+          <TouchableOpacity onPress={() => setShowDatePicker(true)} className="rounded bg-secondary p-5">
+            <Fontisto name="date" size={30} color={Colors.background} />
           </TouchableOpacity>
           {showDatePicker && (
             <DateTimePicker
@@ -167,7 +184,7 @@ const Onboarding = () => {
             />
           )}
           {selectedDate && (
-            <Text className="mt-4">
+            <Text className="text-lg">
               Selected Date: {selectedDate.toLocaleDateString("en-GB")}
             </Text>
           )}

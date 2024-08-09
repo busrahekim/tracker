@@ -32,7 +32,7 @@ const WorkoutEditPanel: React.FC<WorkoutEditPanelProps> = ({
         onDismiss={onClose}
         contentContainerStyle={{
           backgroundColor: "white",
-          padding: 20,
+          padding: 15,
           margin: 20,
           borderRadius: 10,
         }}
@@ -42,11 +42,11 @@ const WorkoutEditPanel: React.FC<WorkoutEditPanelProps> = ({
             label="Workout Name"
             value={workout}
             onChangeText={setWorkout}
-            className="mb-5"
+            className="mb-2 bg-lightGray"
           />
 
           <List.Section>
-            <List.Subheader>Exercises</List.Subheader>
+            <List.Subheader className="text-lg font-bold">Exercises</List.Subheader>
             {exercises.map((exercise, index) => (
               <TextInput
                 key={index}
@@ -57,14 +57,14 @@ const WorkoutEditPanel: React.FC<WorkoutEditPanelProps> = ({
                     prev.map((ex, i) => (i === index ? text : ex))
                   )
                 }
-                className="mb-2"
+                className="mb-2 bg-lightGray"
               />
             ))}
             <Button
               icon="plus"
               mode="contained"
               onPress={() => setExercises([...exercises, ""])}
-              className="mt-2"
+              className="mt-2 bg-primary"
             >
               Add Exercise
             </Button>
@@ -73,7 +73,7 @@ const WorkoutEditPanel: React.FC<WorkoutEditPanelProps> = ({
           <Button
             mode="contained"
             onPress={handleSave}
-            className="mt-2"
+            className="mt-2 bg-secondary"
           >
             Save Changes
           </Button>

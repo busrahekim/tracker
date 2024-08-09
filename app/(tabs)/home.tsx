@@ -55,7 +55,7 @@ export default function Home() {
               <>
                 <View className="w-full rounded-md p-3 border-b-2 border-r-2 overflow-hidden relative bg-white">
                   <Text className="text-2xl">Hi, buddy!</Text>
-                  {userDoc?.workoutPlan ? (
+                  {!userDoc?.workoutPlan ? (
                     <Text className="text-lg">Ready to hit some PR's?</Text>
                   ) : (
                     <>
