@@ -1,22 +1,8 @@
-import { View, Text, ScrollView, Image } from "react-native";
+import { View } from "react-native";
 import React from "react";
 import CardDeck from "@/components/CardDeck";
 import { useCombinedWorkoutData } from "@/context/CombinedWorkoutDataContext";
-
-interface ScheduleEntry {
-  currentWorkout: string;
-  exerciseSets: any[]; 
-  photoUris: string[];
-  status?: string;
-}
-
-interface Schedule {
-  [date: string]: ScheduleEntry;
-}
-
-interface UserDoc {
-  schedule: Schedule;
-}
+import { UserDoc } from "@/constants/Interfaces";
 
 const Gallery = () => {
   const { userDoc } = useCombinedWorkoutData();
@@ -25,7 +11,6 @@ const Gallery = () => {
     entry.photoUris
       .map(uri => ({ uri, date }))
   );
-  console.log(photosWithDates);
 
   return (
     <View className="flex-1 p-4 items-center justify-between">

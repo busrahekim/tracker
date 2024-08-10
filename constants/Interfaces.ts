@@ -1,5 +1,20 @@
 import { User } from "firebase/auth";
 
+export interface ScheduleEntry {
+  currentWorkout: string;
+  exerciseSets: any[];
+  photoUris: string[];
+  status?: string;
+}
+
+export interface Schedule {
+  [date: string]: ScheduleEntry;
+}
+
+export interface UserDoc {
+  schedule: Schedule;
+}
+
 export interface Content {
   contentId: number;
   title: string;
@@ -22,7 +37,6 @@ export interface DateItem {
   weekday: string;
   date: Date;
 }
-
 
 export interface AuthContextType {
   user: User | null;

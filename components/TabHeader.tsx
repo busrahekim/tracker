@@ -13,8 +13,6 @@ const TabHeader = () => {
 
   const firstLetterOfName = userDoc?.name.charAt(0) || "";
 
-  //TODO:RoundedBtn component either with icon or letter
-
   return (
     <BlurView intensity={80} tint={"extraLight"} style={{ paddingTop: top }}>
       <View className="flex flex-row items-center justify-around gap-2 mx-2">

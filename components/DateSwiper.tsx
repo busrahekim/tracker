@@ -1,18 +1,21 @@
-import {
-  View,
-  Text,
-  StyleSheet,
-  TouchableWithoutFeedback,
-  Dimensions,
-} from "react-native";
-import React, { useRef, useState } from "react";
-import Swiper from "react-native-swiper";
-import moment from "moment";
-import useWeeks from "@/hooks/useWeeks";
-import Colors from "@/constants/Colors";
+import React, { useRef, useState } from 'react';
+import { Dimensions, View, Text, TouchableWithoutFeedback } from 'react-native';
+import Swiper from 'react-native-swiper';
+import moment from 'moment';
+import { SetData, UserDoc } from '@/constants/Interfaces';
+import useWeeks from '@/hooks/useWeeks';
+import { useCombinedWorkoutData } from '@/context/CombinedWorkoutDataContext';
 
-const { width } = Dimensions.get("window");
+const normalizeDate = (date: Date) => {
+  return new Date(date.getFullYear(), date.getMonth(), date.getDate());
+};
 
+const formatDate = (date: Date) => {
+  const year = date.getFullYear();
+  const month = String(date.getMonth() + 1).padStart(2, '0');
+  const day = String(date.getDate()).padStart(2, '0');
+  return `${year}-${month}-${day}`;
+};
 
 const DateSwiper = () => {
   const swiper = useRef<Swiper | null>(null);
@@ -20,6 +23,24 @@ const DateSwiper = () => {
   const [currentWeekOffset, setCurrentWeekOffset] = useState<number>(0);
 
   const weeks = useWeeks(currentWeekOffset);
+
+  const { userDoc } = useCombinedWorkoutData();
+  const { schedule } = userDoc as UserDoc;
+
+  // Filter non-empty exerciseSets
+  const nonEmptyExerciseSets = Object.entries(schedule)
+    .filter(([date, workoutData]) => Object.keys(workoutData.exerciseSets).length > 0)
+    .map(([date, workoutData]) => ({
+      date,
+      exerciseSets: workoutData.exerciseSets,
+    }));
+
+  const selectedDateNormalized = normalizeDate(new Date(selectedDate));
+  const selectedDateString = formatDate(selectedDateNormalized);
+  
+  const selectedDateData = nonEmptyExerciseSets.find(
+    (entry) => entry.date === selectedDateString
+  );
 
   const handleIndexChange = (index: number) => {
     if (index === 1) {
@@ -37,10 +58,9 @@ const DateSwiper = () => {
     }, 100);
   };
 
-
   return (
     <>
-      <View style={styles.picker}>
+      <View className="flex-1 max-h-20 flex-row py-3 items-center">
         <Swiper
           index={1}
           ref={swiper}
@@ -49,34 +69,38 @@ const DateSwiper = () => {
           onIndexChanged={handleIndexChange}
         >
           {weeks.map((dates, weekIndex) => (
-            <View style={styles.itemRow} key={weekIndex}>
+            <View
+              style={{
+                width: Dimensions.get("window").width,
+              }}
+              className="flex-row items-start justify-between px-3"
+              key={weekIndex}
+            >
               {dates.map((item, dateIndex) => {
-                const isActive =
-                  selectedDate.toDateString() === item.date.toDateString();
+                const itemDateNormalized = normalizeDate(item.date);
+                const isActive = formatDate(selectedDateNormalized) === formatDate(itemDateNormalized);
+
                 return (
                   <TouchableWithoutFeedback
                     key={dateIndex}
                     onPress={() => setSelectedDate(item.date)}
                   >
                     <View
-                      style={[
-                        styles.item,
-                        isActive && {
-                          backgroundColor: Colors.primary,
-                          borderColor: Colors.primary,
-                        },
-                      ]}
+                      className={`flex-1 h-12 mx-1 border rounded-lg border-gray flex-col items-center ${
+                        isActive && "bg-primary border-primary"
+                      }`}
                     >
                       <Text
-                        style={[
-                          styles.itemWeekday,
-                          isActive && { color: "#fff" },
-                        ]}
+                        className={`text-sm font-semibold text-gray ${
+                          isActive && "text-background"
+                        }`}
                       >
                         {item.weekday}
                       </Text>
                       <Text
-                        style={[styles.itemDate, isActive && { color: "#fff" }]}
+                        className={`font-semibold text-lg text-primary ${
+                          isActive && "text-background"
+                        } `}
                       >
                         {item.date.getDate()}
                       </Text>
@@ -88,106 +112,58 @@ const DateSwiper = () => {
           ))}
         </Swiper>
       </View>
-      <View style={styles.footerContainer}>
-        <Text style={styles.subtitle}>{selectedDate.toDateString()}</Text>
-        <View style={styles.placeholder}>
-          <View style={styles.placeholderInset}>
-            {/* Replace with your content */}
+      <View className="flex-1 p-4">
+        <Text className="text-lg font-semibold mb-2 text-gray">
+          {selectedDate.toDateString()}
+        </Text>
+        <View
+          style={{
+            flexGrow: 1,
+            flexShrink: 1,
+            flexBasis: 0,
+            height: 400,
+            marginTop: 0,
+            padding: 0,
+            backgroundColor: "transparent",
+          }}
+        >
+          <View
+            style={{
+              borderWidth: 4,
+              borderColor: "#e5e7eb",
+              borderStyle: "dashed",
+              borderRadius: 9,
+              flexGrow: 1,
+              flexShrink: 1,
+              flexBasis: 0,
+            }}
+          >
+            {/* Display the exerciseSets if there is data for the selectedDate */}
+            {selectedDateData ? (
+              <View>
+                {Object.entries(selectedDateData.exerciseSets).map(
+                  ([exerciseName, sets], index) => (
+                    <View key={index} className="mb-2">
+                      <Text className="font-semibold text-lg text-primary">
+                        {exerciseName}
+                      </Text>
+                      {(sets as SetData[]).map((set, setIndex) => (
+                        <Text key={setIndex}>
+                          Set {setIndex + 1}: {set.kg} kg x {set.rep} reps
+                        </Text>
+                      ))}
+                    </View>
+                  )
+                )}
+              </View>
+            ) : (
+              <Text className="text-gray text-center">No exercise data</Text>
+            )}
           </View>
         </View>
       </View>
     </>
   );
 };
-
-const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-    paddingVertical: 24,
-  },
-  header: {
-    paddingHorizontal: 16,
-  },
-  title: {
-    fontSize: 32,
-    fontWeight: "700",
-    color: "#1d1d1d",
-    marginBottom: 12,
-  },
-  picker: {
-    flex: 1,
-    maxHeight: 74,
-    paddingVertical: 12,
-    flexDirection: "row",
-    alignItems: "center",
-  },
-  footerContainer: {
-    flex: 1,
-    paddingHorizontal: 16,
-    paddingVertical: 24,
-  },
-
-  subtitle: {
-    fontSize: 17,
-    fontWeight: "600",
-    color: "#999999",
-    marginBottom: 12,
-  },
-  footer: {
-    marginTop: "auto",
-    paddingHorizontal: 16,
-  },
-  /** Item */
-  item: {
-    flex: 1,
-    height: 50,
-    marginHorizontal: 4,
-    paddingVertical: 6,
-    paddingHorizontal: 4,
-    borderWidth: 1,
-    borderRadius: 8,
-    borderColor: "#e3e3e3",
-    flexDirection: "column",
-    alignItems: "center",
-  },
-  itemRow: {
-    width: width,
-    flexDirection: "row",
-    alignItems: "flex-start",
-    justifyContent: "space-between",
-    paddingHorizontal: 12,
-  },
-  itemWeekday: {
-    fontSize: 13,
-    fontWeight: "500",
-    color: "#737373",
-    marginBottom: 4,
-  },
-  itemDate: {
-    fontSize: 15,
-    fontWeight: "600",
-    color: Colors.primary,
-  },
-  /** Placeholder */
-  placeholder: {
-    flexGrow: 1,
-    flexShrink: 1,
-    flexBasis: 0,
-    height: 400,
-    marginTop: 0,
-    padding: 0,
-    backgroundColor: "transparent",
-  },
-  placeholderInset: {
-    borderWidth: 4,
-    borderColor: "#e5e7eb",
-    borderStyle: "dashed",
-    borderRadius: 9,
-    flexGrow: 1,
-    flexShrink: 1,
-    flexBasis: 0,
-  },
-
-});
 
 export default DateSwiper;
