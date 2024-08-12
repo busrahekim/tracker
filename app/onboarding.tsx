@@ -12,7 +12,6 @@ import Loading from "@/components/Loading";
 import { useFetchDB } from "@/hooks/useFetchDB";
 import { SetData, StepData } from "@/constants/Interfaces";
 
-
 const Onboarding = () => {
   const [currentStep, setCurrentStep] = useState(1);
   const [selectedContent, setSelectedContent] = useState<
@@ -53,51 +52,58 @@ const Onboarding = () => {
     startDate: string,
     contentTitles: string[]
   ) => {
-    const schedule: { [date: string]: { currentWorkout: string; exerciseSets: { [key: number]: SetData[] }; photoUris: string[]; status: string; } } = {};
+    const schedule: {
+      [date: string]: {
+        currentWorkout: string;
+        exerciseSets: { [key: number]: SetData[] };
+        photoUris: string[];
+        status: string;
+      };
+    } = {};
     const start = new Date(startDate);
-  
+
     const workoutDays = contentTitles;
     const workoutCycleLength = workoutDays.length;
-  
+
     let currentDate = start;
     let dayIndex = 0;
-  
+
     while (Object.keys(schedule).length < 30) {
       const dateString = currentDate.toISOString().split("T")[0];
-  
+
       schedule[dateString] = {
         currentWorkout: workoutDays[dayIndex % workoutCycleLength],
-        exerciseSets: {},  
-        photoUris: [],      
-        status: ""
+        exerciseSets: {},
+        photoUris: [],
+        status: "",
       };
-  
+
       dayIndex += 1;
       currentDate.setDate(currentDate.getDate() + 1);
     }
-  
+
     return schedule;
   };
-  
+
   const handleFinish = async () => {
     const auth = getAuth();
     const user = auth.currentUser;
-  
+
     if (!user) {
       console.error("No authenticated user found!");
       return;
     }
-  
+
     if (!stepsData) {
       console.error("Steps data is not available.");
       return;
     }
-  
+
     const userDocRef = doc(FIRESTORE_DB, "users", user.uid);
     const formattedDate = selectedDate
       ? selectedDate.toISOString().split("T")[0]
       : "";
-  
+
     const selectedWorkoutPlan = stepsData[0]?.content.find(
       (c) => c.contentId === selectedContent[1]
     );
@@ -106,23 +112,21 @@ const Onboarding = () => {
     const frequency =
       stepsData[2]?.content.find((c) => c.contentId === selectedContent[3])
         ?.title || "";
-  
-    const schedule = generateWorkoutSchedule(
-      formattedDate,
-      contentTitles
-    );
-  
+
+    const schedule = generateWorkoutSchedule(formattedDate, contentTitles);
+
     try {
       await setDoc(
         userDocRef,
         {
           workoutPlan,
-          unit: stepsData[1]?.content.find(
-            (c) => c.contentId === selectedContent[2]
-          )?.title || "",
+          unit:
+            stepsData[1]?.content.find(
+              (c) => c.contentId === selectedContent[2]
+            )?.title || "",
           frequency,
           startDate: formattedDate,
-          schedule, 
+          schedule,
         },
         { merge: true }
       );
@@ -131,7 +135,6 @@ const Onboarding = () => {
       console.error("Error updating document: ", error);
     }
   };
-  
 
   const handleSelect = (step: number, contentId: number) => {
     setSelectedContent({ ...selectedContent, [step]: contentId });
@@ -170,7 +173,10 @@ const Onboarding = () => {
       {/* Current Step Content */}
       {currentStep === 3 ? (
         <>
-          <TouchableOpacity onPress={() => setShowDatePicker(true)} className="rounded bg-secondary p-5">
+          <TouchableOpacity
+            onPress={() => setShowDatePicker(true)}
+            className="rounded bg-secondary p-5"
+          >
             <Fontisto name="date" size={30} color={Colors.background} />
           </TouchableOpacity>
           {showDatePicker && (
@@ -188,14 +194,23 @@ const Onboarding = () => {
             </Text>
           )}
         </>
-      ) : (
-        currentStepData && (
+      ) : currentStepData && currentStep === 1 ? (
+        <View className="items-center w-full">
           <Step
             step={currentStep}
             data={currentStepData}
             onSelect={handleSelect}
           />
-        )
+          <Text className="text-gray w-3/4">
+            ** You can customize or add new workout plan after you finished
+          </Text>
+        </View>
+      ) : (
+        <Step
+          step={currentStep}
+          data={currentStepData!}
+          onSelect={handleSelect}
+        />
       )}
 
       {/* Navigation Controls */}
