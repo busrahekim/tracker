@@ -2,8 +2,10 @@ import { View, Text, TouchableOpacity } from "react-native";
 import React from "react";
 import { BlurView } from "expo-blur";
 import Loading from "@/components/Loading";
-import { useFetchDB } from "@/hooks/useFetchDB";
 import { useCombinedWorkoutData } from "@/context/CombinedWorkoutDataContext";
+
+// TODO: protein page -> get premium -> open paywall
+// protein screen need to be implemented for the premium users
 
 const Protein = () => {
   const { userDoc, loading, error } = useCombinedWorkoutData();

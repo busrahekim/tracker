@@ -9,6 +9,8 @@ import WorkoutEditPanel from "@/components/DialogPanels/WorkoutEditPanel";
 import { FIRESTORE_DB } from "@/firebaseConfig";
 import { doc, updateDoc } from "firebase/firestore";
 
+// TODO: a button to create a new one
+
 const Workout = () => {
   const headerHeight = useHeaderHeight();
   const { exercises, loading, error } = useCombinedWorkoutData();

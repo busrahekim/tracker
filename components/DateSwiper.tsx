@@ -1,10 +1,16 @@
-import React, { useRef, useState } from 'react';
-import { Dimensions, View, Text, TouchableWithoutFeedback } from 'react-native';
-import Swiper from 'react-native-swiper';
-import moment from 'moment';
-import { SetData, UserDoc } from '@/constants/Interfaces';
-import useWeeks from '@/hooks/useWeeks';
-import { useCombinedWorkoutData } from '@/context/CombinedWorkoutDataContext';
+import React, { useRef, useState } from "react";
+import {
+  Dimensions,
+  View,
+  Text,
+  TouchableWithoutFeedback,
+  TouchableOpacity,
+} from "react-native";
+import Swiper from "react-native-swiper";
+import moment from "moment";
+import { SetData, UserDoc } from "@/constants/Interfaces";
+import useWeeks from "@/hooks/useWeeks";
+import { useCombinedWorkoutData } from "@/context/CombinedWorkoutDataContext";
 
 const normalizeDate = (date: Date) => {
   return new Date(date.getFullYear(), date.getMonth(), date.getDate());
@@ -12,8 +18,8 @@ const normalizeDate = (date: Date) => {
 
 const formatDate = (date: Date) => {
   const year = date.getFullYear();
-  const month = String(date.getMonth() + 1).padStart(2, '0');
-  const day = String(date.getDate()).padStart(2, '0');
+  const month = String(date.getMonth() + 1).padStart(2, "0");
+  const day = String(date.getDate()).padStart(2, "0");
   return `${year}-${month}-${day}`;
 };
 
@@ -29,7 +35,9 @@ const DateSwiper = () => {
 
   // Filter non-empty exerciseSets
   const nonEmptyExerciseSets = Object.entries(schedule)
-    .filter(([date, workoutData]) => Object.keys(workoutData.exerciseSets).length > 0)
+    .filter(
+      ([date, workoutData]) => Object.keys(workoutData.exerciseSets).length > 0
+    )
     .map(([date, workoutData]) => ({
       date,
       exerciseSets: workoutData.exerciseSets,
@@ -37,7 +45,7 @@ const DateSwiper = () => {
 
   const selectedDateNormalized = normalizeDate(new Date(selectedDate));
   const selectedDateString = formatDate(selectedDateNormalized);
-  
+
   const selectedDateData = nonEmptyExerciseSets.find(
     (entry) => entry.date === selectedDateString
   );
@@ -57,6 +65,10 @@ const DateSwiper = () => {
       swiper.current?.scrollTo(1, false);
     }, 100);
   };
+
+  //TODO: user is allowed to previous data only for corresponding workout day
+  // if that day was "Push" and forget, user can only add data for "Push" exercises
+  const handleAddData = () => {};
 
   return (
     <>
@@ -78,7 +90,9 @@ const DateSwiper = () => {
             >
               {dates.map((item, dateIndex) => {
                 const itemDateNormalized = normalizeDate(item.date);
-                const isActive = formatDate(selectedDateNormalized) === formatDate(itemDateNormalized);
+                const isActive =
+                  formatDate(selectedDateNormalized) ===
+                  formatDate(itemDateNormalized);
 
                 return (
                   <TouchableWithoutFeedback
@@ -113,9 +127,18 @@ const DateSwiper = () => {
         </Swiper>
       </View>
       <View className="flex-1 p-4">
-        <Text className="text-lg font-semibold mb-2 text-gray">
-          {selectedDate.toDateString()}
-        </Text>
+        <View className="flex flex-row items-center justify-between mb-2">
+          <Text className="text-lg font-semibold  text-gray">
+            {selectedDate.toDateString()}
+          </Text>
+          <TouchableOpacity
+            className="bg-primary rounded p-1"
+            onPress={handleAddData}
+          >
+            <Text className="font-semibold text-background">Add Data</Text>
+          </TouchableOpacity>
+        </View>
+
         <View
           style={{
             flexGrow: 1,
@@ -162,6 +185,7 @@ const DateSwiper = () => {
           </View>
         </View>
       </View>
+      
     </>
   );
 };

@@ -19,8 +19,10 @@ import { GestureHandlerRootView } from "react-native-gesture-handler";
 import { PaperProvider } from "react-native-paper";
 import "react-native-reanimated";
 import { SafeAreaProvider } from "react-native-safe-area-context";
-
 export { ErrorBoundary } from "expo-router";
+
+
+// TODO: database update use unique key and intersections instead of using words
 
 const queryClient = new QueryClient();
 

@@ -3,6 +3,8 @@ import { useRouter } from "expo-router";
 import { getAuth, signOut } from "firebase/auth";
 import { TouchableOpacity, View, Text } from "react-native";
 
+// TODO: need to be implemented
+
 export default function Profile() {
   const router = useRouter();
   const handleSignOut = async () => {
