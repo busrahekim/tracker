@@ -1,4 +1,4 @@
-const useGetDateString = (selectedDate: Date) => {
+const useGetDateString = () => {
   const normalizeDate = (date: Date) => {
     return new Date(date.getFullYear(), date.getMonth(), date.getDate());
   };
@@ -10,10 +10,7 @@ const useGetDateString = (selectedDate: Date) => {
     return `${year}-${month}-${day}`;
   };
 
-  const selectedDateNormalized = normalizeDate(new Date(selectedDate));
-  const selectedDateString = formatDate(selectedDateNormalized);
-
-  return { selectedDateNormalized, selectedDateString };
+  return { normalizeDate, formatDate };
 };
 
 export default useGetDateString;
