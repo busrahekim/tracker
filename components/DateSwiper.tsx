@@ -11,6 +11,7 @@ import moment from "moment";
 import { SetData, UserDoc } from "@/constants/Interfaces";
 import useWeeks from "@/hooks/useWeeks";
 import { useCombinedWorkoutData } from "@/context/CombinedWorkoutDataContext";
+import useGetDateString from "@/hooks/useGetDateString";
 
 const normalizeDate = (date: Date) => {
   return new Date(date.getFullYear(), date.getMonth(), date.getDate());
@@ -29,9 +30,20 @@ const DateSwiper = () => {
   const [currentWeekOffset, setCurrentWeekOffset] = useState<number>(0);
 
   const weeks = useWeeks(currentWeekOffset);
+  const { selectedDateNormalized, selectedDateString } =
+    useGetDateString(selectedDate);
+  console.log(selectedDateString);
 
   const { userDoc } = useCombinedWorkoutData();
   const { schedule } = userDoc as UserDoc;
+
+  const scheduledExercisesForDate = Object.entries(schedule)
+    .filter(([date, workoutData]) => date === selectedDateString)
+    .map(([date, workoutData]) => ({
+      date,
+      exerciseSets: workoutData.exerciseSets,
+    }));
+  console.log(scheduledExercisesForDate);
 
   // Filter non-empty exerciseSets
   const nonEmptyExerciseSets = Object.entries(schedule)
@@ -42,9 +54,6 @@ const DateSwiper = () => {
       date,
       exerciseSets: workoutData.exerciseSets,
     }));
-
-  const selectedDateNormalized = normalizeDate(new Date(selectedDate));
-  const selectedDateString = formatDate(selectedDateNormalized);
 
   const selectedDateData = nonEmptyExerciseSets.find(
     (entry) => entry.date === selectedDateString
@@ -185,7 +194,6 @@ const DateSwiper = () => {
           </View>
         </View>
       </View>
-      
     </>
   );
 };
