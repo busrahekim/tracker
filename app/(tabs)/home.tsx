@@ -11,8 +11,8 @@ import ScheduledWorkoutView from "@/components/ScheduledWorkoutView";
 import { useCombinedWorkoutData } from "@/context/CombinedWorkoutDataContext";
 
 
-// TODO: user does current workout but forgot to enter the data
-// history page add data button in case of this, also a push notificiation would be nice
+// TODO: user forgot to enter the data for the workout day
+//   a push notificiation 
 
 // user goes off for a workout day
 // a button on home screen like it says do not feel to do your workout today or go off -> lets reschedule again
