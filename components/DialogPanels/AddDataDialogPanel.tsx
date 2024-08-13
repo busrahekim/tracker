@@ -13,7 +13,6 @@ import { useCombinedWorkoutData } from "@/context/CombinedWorkoutDataContext";
 import { AntDesign } from "@expo/vector-icons";
 import Colors from "@/constants/Colors";
 
-// TODO: trash icon to remove set
 
 interface AddDataDialogPanelProps {
   visible: boolean;

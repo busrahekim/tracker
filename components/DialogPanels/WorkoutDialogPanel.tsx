@@ -3,15 +3,15 @@ import React, { useEffect, useState } from "react";
 import { Dialog, Portal, Button as PaperButton } from "react-native-paper";
 import Colors from "@/constants/Colors";
 import { SetData } from "@/constants/Interfaces";
+import { AntDesign } from "@expo/vector-icons";
 
 interface WorkoutDialogProps {
   visible: boolean;
   onDismiss: () => void;
   exerciseTitle: string;
   initialSets: SetData[];
-  onSaveSets: (sets: SetData[]) => void; 
+  onSaveSets: (sets: SetData[]) => void;
 }
-
 
 const WorkoutDialogPanel = ({
   visible,
@@ -37,6 +37,11 @@ const WorkoutDialogPanel = ({
   ) => {
     const newSets = [...sets];
     newSets[index][field] = value;
+    setSets(newSets);
+  };
+
+  const handleDeleteSet = (index: number) => {
+    const newSets = sets.filter((_, setIndex) => setIndex !== index);
     setSets(newSets);
   };
 
@@ -71,6 +76,9 @@ const WorkoutDialogPanel = ({
                   value={set.rep}
                   onChangeText={(text) => updateSet(setIndex, "rep", text)}
                 />
+                 <TouchableOpacity onPress={() => handleDeleteSet(setIndex)}>
+                  <AntDesign name="delete" size={24} color={Colors.primary} />
+                </TouchableOpacity>
               </View>
             ))}
             <TouchableOpacity onPress={addSet} className="items-start mt-2">
