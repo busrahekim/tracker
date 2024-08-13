@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from "react";
 import {
+  Alert,
   ScrollView,
   Text,
   TextInput,
@@ -9,6 +10,10 @@ import {
 import { Dialog, Portal, Button as PaperButton } from "react-native-paper";
 import { SetData } from "@/constants/Interfaces";
 import { useCombinedWorkoutData } from "@/context/CombinedWorkoutDataContext";
+import { AntDesign } from "@expo/vector-icons";
+import Colors from "@/constants/Colors";
+
+// TODO: trash icon to remove set
 
 interface AddDataDialogPanelProps {
   visible: boolean;
@@ -25,8 +30,7 @@ const AddDataDialogPanel: React.FC<AddDataDialogPanelProps> = ({
   exercises,
   onSave,
 }) => {
-  const { exerciseSets, setExerciseSets } =
-    useCombinedWorkoutData();
+  const { exerciseSets, setExerciseSets } = useCombinedWorkoutData();
 
   const [exerciseData, setExerciseData] = useState<{
     [exercise: string]: SetData[];
@@ -60,7 +64,28 @@ const AddDataDialogPanel: React.FC<AddDataDialogPanelProps> = ({
       [exercise]: newSets,
     }));
     setExerciseSets({ ...exerciseSets, [exercise]: newSets });
-    
+  };
+
+  const handleDeleteSet = (exercise: string, setIndex: number) => {
+    Alert.alert("Delete Set", "Are you sure you want to delete this set?", [
+      {
+        text: "Cancel",
+        style: "cancel",
+      },
+      {
+        text: "Delete",
+        onPress: () => {
+          const newSets = exerciseData[exercise].filter(
+            (_, index) => index !== setIndex
+          );
+          setExerciseData((prevState) => ({
+            ...prevState,
+            [exercise]: newSets,
+          }));
+          setExerciseSets({ ...exerciseSets, [exercise]: newSets });
+        },
+      },
+    ]);
   };
 
   const handleSave = () => {
@@ -109,6 +134,13 @@ const AddDataDialogPanel: React.FC<AddDataDialogPanelProps> = ({
                       }
                       keyboardType="numeric"
                     />
+                    <TouchableOpacity onPress={() => handleDeleteSet(exercise, setIndex)}>
+                      <AntDesign
+                        name="delete"
+                        size={18}
+                        color={Colors.primary}
+                      />
+                    </TouchableOpacity>
                   </View>
                 ))}
                 <TouchableOpacity onPress={() => addSet(exercise)}>
