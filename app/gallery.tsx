@@ -2,14 +2,7 @@ import { View, ScrollView, TouchableOpacity, Modal, Image } from "react-native";
 import React, { useState } from "react";
 import CardDeck from "@/components/CardDeck";
 import { useCombinedWorkoutData } from "@/context/CombinedWorkoutDataContext";
-import { UserDoc } from "@/constants/Interfaces";
-
-// TODO:
-
-interface PhotoEntry {
-  uri: string;
-  date: string;
-}
+import { PhotoEntry, UserDoc } from "@/constants/Interfaces";
 
 const Gallery = () => {
   const { userDoc } = useCombinedWorkoutData();
@@ -28,7 +21,9 @@ const Gallery = () => {
     });
   });
 
-  const sortedDates = Object.keys(photosByDate).sort((a, b) => new Date(b).getTime() - new Date(a).getTime());
+  const sortedDates = Object.keys(photosByDate).sort(
+    (a, b) => new Date(b).getTime() - new Date(a).getTime()
+  );
 
   const cardDecks = sortedDates.reduce((decks, date) => {
     const photos = photosByDate[date];
@@ -94,7 +89,7 @@ const Gallery = () => {
                   source={
                     photo.uri.trim()
                       ? { uri: photo.uri }
-                      : require("@/assets/images/backgroundImage.jpg")
+                      : require("@/assets/images/bg-empty.jpg")
                   }
                   className="w-24 h-36 object-cover rounded-md bg-background border mx-2"
                 />

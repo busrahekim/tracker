@@ -59,3 +59,8 @@ export interface CombinedWorkoutDataContextType {
   setExerciseSets: (sets: { [key: number]: SetData[] }) => void;
   setUploadedPhotos: (photos: string[]) => void;
 }
+
+export interface PhotoEntry {
+  uri: string;
+  date: string;
+}

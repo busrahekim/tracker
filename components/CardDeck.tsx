@@ -1,8 +1,9 @@
+import { PhotoEntry } from "@/constants/Interfaces";
 import React from "react";
 import { View, Text, Image } from "react-native";
 
 interface CardDeckProps {
-  photos: { uri: string; date: string }[];
+  photos: PhotoEntry[];
 }
 
 const CardDeck = ({ photos }: CardDeckProps) => {
@@ -43,7 +44,7 @@ const CardDeck = ({ photos }: CardDeckProps) => {
             source={
               photo.uri.trim()
                 ? { uri: photo.uri }
-                : require("@/assets/images/backgroundImage.jpg")
+                : require("@/assets/images/bg-empty.jpg")
             }
             className="w-24 h-36 object-cover rounded-md bg-background border"
           />
