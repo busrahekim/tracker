@@ -14,8 +14,12 @@ export const useSaveWorkoutData = () => {
     const auth = getAuth();
     const user = auth.currentUser;
 
-    const namedExerciseSets = Object.keys(exerciseSets).reduce((acc, key) => {
-      const exerciseIndex = Number(key); 
+     // to determine if the keys are numeric or exercise names
+     const isIndexed = Object.keys(exerciseSets).every(key => !isNaN(Number(key)));
+
+    const namedExerciseSets =  isIndexed
+    ? Object.keys(exerciseSets).reduce((acc, key) => {
+      const exerciseIndex = Number(key);
       const exerciseName = currentExercises[exerciseIndex];
 
       if (exerciseName) {
@@ -23,7 +27,8 @@ export const useSaveWorkoutData = () => {
       }
 
       return acc;
-    }, {} as Record<string, Array<{ kg: string; rep: string }>>);
+    }, {} as Record<string, Array<{ kg: string; rep: string }>>)
+    : exerciseSets;
 
     if (user) {
       const userDocRef = doc(FIRESTORE_DB, "users", user.uid);

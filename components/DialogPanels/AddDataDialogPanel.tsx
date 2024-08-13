@@ -7,18 +7,8 @@ import {
   View,
 } from "react-native";
 import { Dialog, Portal, Button as PaperButton } from "react-native-paper";
-import Colors from "@/constants/Colors";
 import { SetData } from "@/constants/Interfaces";
-
-// TODO: not done
-
-interface AddDataDialogPanelProps {
-  visible: boolean;
-  onClose: () => void;
-  workoutDay: string;
-  exercises: string[];
-  onSave: (updatedExercises: { [exercise: string]: SetData[] }) => void;
-}
+import { useCombinedWorkoutData } from "@/context/CombinedWorkoutDataContext";
 
 interface AddDataDialogPanelProps {
   visible: boolean;
@@ -35,6 +25,9 @@ const AddDataDialogPanel: React.FC<AddDataDialogPanelProps> = ({
   exercises,
   onSave,
 }) => {
+  const { exerciseSets, setExerciseSets } =
+    useCombinedWorkoutData();
+
   const [exerciseData, setExerciseData] = useState<{
     [exercise: string]: SetData[];
   }>({});
@@ -66,6 +59,8 @@ const AddDataDialogPanel: React.FC<AddDataDialogPanelProps> = ({
       ...prevState,
       [exercise]: newSets,
     }));
+    setExerciseSets({ ...exerciseSets, [exercise]: newSets });
+    
   };
 
   const handleSave = () => {

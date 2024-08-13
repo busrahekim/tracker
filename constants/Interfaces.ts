@@ -58,6 +58,7 @@ export interface CombinedWorkoutDataContextType {
   currentWorkoutDescription: string;
   setExerciseSets: (sets: { [key: number]: SetData[] }) => void;
   setUploadedPhotos: (photos: string[]) => void;
+  refetchUserData: () => void;
 }
 
 export interface PhotoEntry {

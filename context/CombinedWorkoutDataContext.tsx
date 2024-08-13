@@ -22,6 +22,7 @@ export const CombinedWorkoutDataContext =
     currentWorkoutDescription: "",
     setExerciseSets: () => {},
     setUploadedPhotos: () => {},
+    refetchUserData: () => {},
   });
 
 export const CombinedWorkoutDataProvider = ({
@@ -29,7 +30,7 @@ export const CombinedWorkoutDataProvider = ({
 }: {
   children: ReactNode;
 }) => {
-  const { userDoc, stepsData, exercises, loading, error } = useFetchDB();
+  const { userDoc, stepsData, exercises, loading, error, refetchUserData } = useFetchDB();
   const [exerciseSets, setExerciseSets] = useState<{
     [key: number]: SetData[];
   }>({});
@@ -39,7 +40,8 @@ export const CombinedWorkoutDataProvider = ({
 
   const currentDate = new Date().toISOString().split("T")[0];
   const currentWorkout =
-    userDoc?.schedule?.[currentDate].currentWorkout || "No planned workout for today";
+    userDoc?.schedule?.[currentDate].currentWorkout ||
+    "No planned workout for today";
   const currentWorkoutDescription =
     exercises?.find((workout) => workout.day === currentWorkout)?.description ||
     [];
@@ -61,6 +63,7 @@ export const CombinedWorkoutDataProvider = ({
       currentWorkoutDescription,
       setExerciseSets,
       setUploadedPhotos,
+      refetchUserData,
     }),
     [
       exerciseSets,
@@ -73,6 +76,7 @@ export const CombinedWorkoutDataProvider = ({
       currentWorkout,
       currentExercises,
       currentWorkoutDescription,
+      refetchUserData,
     ]
   );
 

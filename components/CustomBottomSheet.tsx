@@ -1,4 +1,4 @@
-import { Text, StyleSheet, TouchableOpacity, View } from "react-native";
+import { Text, StyleSheet, TouchableOpacity, View, Alert } from "react-native";
 import React, { forwardRef } from "react";
 import BottomSheet, { BottomSheetScrollView } from "@gorhom/bottom-sheet";
 import WorkoutTrackView from "./WorkoutTrackView";
@@ -15,13 +15,19 @@ const CustomBottomSheet = forwardRef<BottomSheet, CustomBottomSheetProps>(
   ({ isVisible, onClose }, ref) => {
     if (!isVisible) return null;
 
-    const { currentWorkout } = useCombinedWorkoutData();
+    const { currentWorkout, refetchUserData } = useCombinedWorkoutData();
     const { saveWorkoutData } = useSaveWorkoutData();
 
-    const handleFinish = () => {
+    const handleFinish = async () => {
       const currentDate = new Date().toISOString().split("T")[0];
-      saveWorkoutData(currentDate, currentWorkout);
-      onClose();
+      try {
+        await saveWorkoutData(currentDate, currentWorkout);
+        await refetchUserData();
+        onClose();
+      } catch (error) {
+        Alert.alert("Error", "Failed to save workout data. Please try again.");
+        console.error(error);
+      }
     };
 
     return (

@@ -1,5 +1,12 @@
 import React, { useRef, useState } from "react";
-import { Dimensions, View, Text, TouchableWithoutFeedback, TouchableOpacity } from "react-native";
+import {
+  Dimensions,
+  View,
+  Text,
+  TouchableWithoutFeedback,
+  TouchableOpacity,
+  Alert,
+} from "react-native";
 import Swiper from "react-native-swiper";
 import moment from "moment";
 import { SetData, UserDoc } from "@/constants/Interfaces";
@@ -7,6 +14,7 @@ import useWeeks from "@/hooks/useWeeks";
 import { useCombinedWorkoutData } from "@/context/CombinedWorkoutDataContext";
 import useGetDateString from "@/hooks/useGetDateString";
 import AddDataDialogPanel from "./DialogPanels/AddDataDialogPanel";
+import { useSaveWorkoutData } from "@/hooks/useSaveWorkoutData";
 
 const DateSwiper = () => {
   const swiper = useRef<Swiper | null>(null);
@@ -19,18 +27,20 @@ const DateSwiper = () => {
   const weeks = useWeeks(currentWeekOffset);
   const { normalizeDate, formatDate } = useGetDateString();
 
+  const { saveWorkoutData } = useSaveWorkoutData();
+
   const selectedDateNormalized = normalizeDate(new Date(selectedDate));
   const selectedDateString = formatDate(selectedDateNormalized);
 
-  const { userDoc, exercises } = useCombinedWorkoutData();
+  const { userDoc, exercises, refetchUserData } = useCombinedWorkoutData();
   const { schedule } = userDoc as UserDoc;
-  
+
   const scheduledExerciseSetsForDate = Object.entries(schedule)
     .filter(([date, _]) => date === selectedDateString)
     .map(([date, workoutData]) => ({
       date,
       exerciseSets: workoutData.exerciseSets,
-      day: workoutData.currentWorkout
+      day: workoutData.currentWorkout,
     }));
 
   const exerciseSets = scheduledExerciseSetsForDate[0]?.exerciseSets || {};
@@ -53,20 +63,29 @@ const DateSwiper = () => {
     const workoutDay = scheduledExerciseSetsForDate[0].day;
 
     if (workoutDay === "Off") {
-      console.log("No workout scheduled for this day.");
+      Alert.alert("OFF DAY", "No workout scheduled for this day.");
       return;
     }
-    
-    const allowedExercises = exercises?.find((ex) => ex.day === workoutDay)?.exercises || [];
-    
+
+    const allowedExercises =
+      exercises?.find((ex) => ex.day === workoutDay)?.exercises || [];
+
     setAllowedExercises(allowedExercises);
     setCurrentWorkoutDay(workoutDay);
     setDialogVisible(true);
   };
 
-  const handleSaveData = (updatedExercises: { [exercise: string]: SetData[] }) => {
-    console.log("Saved data:", updatedExercises);
-    // to be continued
+  const handleSaveData = async (updatedExercises: {
+    [exercise: string]: SetData[];
+  }) => {
+    try {
+      await saveWorkoutData(selectedDateString, currentWorkoutDay);
+      await refetchUserData();
+      Alert.alert("Success", "Workout data saved successfully!");
+    } catch (error) {
+      Alert.alert("Error", "Failed to save workout data. Please try again.");
+      console.error(error);
+    }
   };
 
   return (
@@ -131,8 +150,11 @@ const DateSwiper = () => {
             {selectedDate.toDateString()}
           </Text>
           <TouchableOpacity
-            className="bg-primary rounded p-1"
+            className={`bg-primary rounded p-1 ${
+              moment(selectedDate).isAfter(moment()) && "bg-gray opacity-50"
+            }`}
             onPress={handleAddData}
+            disabled={moment(selectedDate).isAfter(moment())}
           >
             <Text className="font-semibold text-background">Add Data</Text>
           </TouchableOpacity>
@@ -165,7 +187,7 @@ const DateSwiper = () => {
           )}
         </View>
       </View>
-      
+
       {/* AddDataDialogPanel */}
       <AddDataDialogPanel
         visible={dialogVisible}

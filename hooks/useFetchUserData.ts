@@ -22,5 +22,10 @@ export const useFetchUserData = () => {
     }
   };
 
-  return useQuery({ queryKey: ["userDoc"], queryFn: fetchUserData });
+  const queryResult = useQuery({
+    queryKey: ["userDoc"],
+    queryFn: fetchUserData,
+  });
+
+  return queryResult;
 };

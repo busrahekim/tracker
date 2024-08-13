@@ -17,6 +17,7 @@ export const useFetchDB = () => {
     data: userDoc,
     error: userDocError,
     isLoading: userDocLoading,
+    refetch: refetchUserData,
   } = useFetchUserData();
 
   const loading = stepsLoading || exercisesLoading || userDocLoading;
@@ -28,5 +29,6 @@ export const useFetchDB = () => {
     exercises,
     loading,
     error,
+    refetchUserData
   };
 };
