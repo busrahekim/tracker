@@ -29,7 +29,7 @@ const ScheduledWorkoutView = ({ showModal }: ScheduledWorkoutViewProps) => {
   const workoutStatus = todaySchedule ? todaySchedule.status : undefined;
 
   return (
-    <View className="flex-1 ">
+    <View className="flex-1 mt-2">
       <View className="flex-1 bg-primary rounded-md items-center my-2 p-4">
         <View className="flex-row items-center justify-between w-full gap-2">
           <Text className="text-white text-xl">{currentWorkout} Day</Text>

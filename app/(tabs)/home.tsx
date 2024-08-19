@@ -1,4 +1,4 @@
-import { TouchableOpacity, Text, View, ScrollView } from "react-native";
+import { TouchableOpacity, Text, View, ScrollView, Alert } from "react-native";
 import { useRouter } from "expo-router";
 import { useHeaderHeight } from "@react-navigation/elements";
 import Loading from "@/components/Loading";
@@ -9,8 +9,10 @@ import { GestureHandlerRootView } from "react-native-gesture-handler";
 import CustomBottomSheet from "@/components/CustomBottomSheet";
 import ScheduledWorkoutView from "@/components/ScheduledWorkoutView";
 import { useCombinedWorkoutData } from "@/context/CombinedWorkoutDataContext";
-import * as Notifications from 'expo-notifications';
-
+import * as Notifications from "expo-notifications";
+import { doc, getDoc, setDoc } from "firebase/firestore";
+import { FIRESTORE_DB } from "@/firebaseConfig";
+import { getAuth } from "firebase/auth";
 
 export default function Home() {
   const router = useRouter();
@@ -18,7 +20,8 @@ export default function Home() {
   const [isModalVisible, setModalVisible] = useState(false);
   const bottomSheetRef = useRef<BottomSheet>(null);
 
-  const { userDoc, loading, currentWorkout } = useCombinedWorkoutData();
+  const { userDoc, loading, currentWorkout, refetchUserData } =
+    useCombinedWorkoutData();
 
   const currentDayName = new Date().toLocaleDateString("en-GB", {
     weekday: "long",
@@ -27,7 +30,7 @@ export default function Home() {
   useEffect(() => {
     const requestPermissions = async () => {
       const { status } = await Notifications.getPermissionsAsync();
-      if (status !== 'granted') {
+      if (status !== "granted") {
         await Notifications.requestPermissionsAsync();
       }
     };
@@ -38,7 +41,7 @@ export default function Home() {
           content: {
             title: "Workout Reminder",
             body: "Ready to hit your workout?",
-            sound: 'default',
+            sound: "default",
           },
           trigger: {
             hour: 9,
@@ -65,6 +68,55 @@ export default function Home() {
 
   const handleClick = () => {
     router.replace("/onboarding");
+  };
+
+  const handleSkipDay = async () => {
+    try {
+      const auth = getAuth();
+      const user = auth.currentUser;
+
+      if (!user) {
+        console.error("No authenticated user found!");
+        return;
+      }
+
+      const userDocRef = doc(FIRESTORE_DB, "users", user.uid);
+
+      // current schedule
+      const userDoc = await getDoc(userDocRef);
+      const schedule = userDoc.data()?.schedule || {};
+
+      
+      const today = new Date().toISOString().split("T")[0];
+      const newSchedule = { ...schedule };
+
+      // Shift workouts by one day
+      Object.keys(newSchedule).forEach((dateStr) => {
+        const date = new Date(dateStr);
+        if (date >= new Date(today)) {
+          const nextDate = new Date(date);
+          nextDate.setDate(nextDate.getDate() + 1);
+          const nextDateStr = nextDate.toISOString().split("T")[0];
+          newSchedule[nextDateStr] = newSchedule[dateStr];
+          delete newSchedule[dateStr];
+        }
+      });
+
+      // Setting today's workout to "Off"
+      newSchedule[today] = {
+        currentWorkout: "Off",
+        exerciseSets: {},
+        photoUris: [],
+        status: "",
+      };
+
+      // Save the updated schedule
+      await setDoc(userDocRef, { schedule: newSchedule }, { merge: true });
+      await refetchUserData();
+      Alert.alert("Workout schedule updated successfully.");
+    } catch (error) {
+      console.error("Error updating schedule: ", error);
+    }
   };
 
   if (loading) {
@@ -109,6 +161,19 @@ export default function Home() {
                 </View>
                 {/* ScheduledWorkoutView */}
                 <ScheduledWorkoutView showModal={showModal} />
+
+                {/** Go off */}
+                <View className="flex-row items-center justify-between mt-2">
+                  <Text className="">
+                    Don't you feel to do your workout today ?
+                  </Text>
+                  <TouchableOpacity
+                    className="p-1 bg-primary rounded"
+                    onPress={handleSkipDay}
+                  >
+                    <Text className="text-white text-center">Skip Workout</Text>
+                  </TouchableOpacity>
+                </View>
               </View>
             ) : (
               <View className="w-full rounded-md p-3 border-b-2 border-r-2 overflow-hidden relative bg-white">
