@@ -3,12 +3,13 @@ import { useRouter } from "expo-router";
 import { useHeaderHeight } from "@react-navigation/elements";
 import Loading from "@/components/Loading";
 import Ribbon from "@/components/Ribbon";
-import { useRef, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import BottomSheet from "@gorhom/bottom-sheet";
 import { GestureHandlerRootView } from "react-native-gesture-handler";
 import CustomBottomSheet from "@/components/CustomBottomSheet";
 import ScheduledWorkoutView from "@/components/ScheduledWorkoutView";
 import { useCombinedWorkoutData } from "@/context/CombinedWorkoutDataContext";
+import * as Notifications from 'expo-notifications';
 
 
 // TODO: user forgot to enter the data for the workout day
@@ -28,6 +29,35 @@ export default function Home() {
   const currentDayName = new Date().toLocaleDateString("en-GB", {
     weekday: "long",
   });
+
+  useEffect(() => {
+    const requestPermissions = async () => {
+      const { status } = await Notifications.getPermissionsAsync();
+      if (status !== 'granted') {
+        await Notifications.requestPermissionsAsync();
+      }
+    };
+
+    const scheduleNotification = async () => {
+      if (currentWorkout !== "Off") {
+        await Notifications.scheduleNotificationAsync({
+          content: {
+            title: "Workout Reminder",
+            body: "Ready to hit your workout?",
+            sound: 'default',
+          },
+          trigger: {
+            hour: 9,
+            minute: 0,
+            repeats: true,
+          },
+        });
+      }
+    };
+
+    requestPermissions();
+    scheduleNotification();
+  }, [currentWorkout]);
 
   const showModal = () => {
     setModalVisible(true);
