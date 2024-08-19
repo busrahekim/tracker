@@ -11,10 +11,6 @@ export interface Schedule {
   [date: string]: ScheduleEntry;
 }
 
-export interface UserDoc {
-  schedule: Schedule;
-}
-
 export interface Content {
   contentId: number;
   title: string;
@@ -64,4 +60,28 @@ export interface CombinedWorkoutDataContextType {
 export interface PhotoEntry {
   uri: string;
   date: string;
+}
+
+export interface Timestamp {
+  seconds: number;
+  nanoseconds: number;
+}
+
+export interface UserDoc {
+  createdAt: Timestamp;
+  email: string;
+  frequency: string;
+  isPremium: boolean;
+  name: string;
+  schedule: Schedule;
+  startDate: string;
+  unit: string;
+  workoutPlan: string;
+}
+
+export interface DropdownProps {
+  selectedValue: string;
+  onValueChange: (value: string) => void;
+  options: string[];
+  disabled: boolean;
 }
