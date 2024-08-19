@@ -12,12 +12,6 @@ import { useCombinedWorkoutData } from "@/context/CombinedWorkoutDataContext";
 import * as Notifications from 'expo-notifications';
 
 
-// TODO: user forgot to enter the data for the workout day
-//   a push notificiation 
-
-// user goes off for a workout day
-// a button on home screen like it says do not feel to do your workout today or go off -> lets reschedule again
-
 export default function Home() {
   const router = useRouter();
   const headerHeight = useHeaderHeight();

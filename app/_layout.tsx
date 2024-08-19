@@ -22,8 +22,6 @@ import { SafeAreaProvider } from "react-native-safe-area-context";
 export { ErrorBoundary } from "expo-router";
 
 
-// TODO: database update use unique key and intersections instead of using words
-
 const queryClient = new QueryClient();
 
 SplashScreen.preventAutoHideAsync();

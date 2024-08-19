@@ -41,7 +41,7 @@ const PaywallPanel = ({ visible, onDismiss, onBuy }: PaywallPanelProps) => {
   };
 
   const handleBuy = () => {
-    //TODO: payment logic 
+    //TODO: 
     onBuy();
   };
 
