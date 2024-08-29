@@ -16,11 +16,9 @@ import { getAuth, onAuthStateChanged } from "firebase/auth";
 import { useEffect } from "react";
 import { useColorScheme } from "react-native";
 import { GestureHandlerRootView } from "react-native-gesture-handler";
-import { PaperProvider } from "react-native-paper";
 import "react-native-reanimated";
 import { SafeAreaProvider } from "react-native-safe-area-context";
 export { ErrorBoundary } from "expo-router";
-
 
 const queryClient = new QueryClient();
 
@@ -98,7 +96,7 @@ const RootLayout = () => {
         name="modal"
         options={{ presentation: "modal", title: "History" }}
       />
-       <Stack.Screen
+      <Stack.Screen
         name="gallery"
         options={{ presentation: "modal", title: "Gallery" }}
       />
@@ -110,17 +108,15 @@ const RootLayoutNav = () => {
   const colorScheme = useColorScheme();
 
   return (
-    <ThemeProvider value={colorScheme === "dark" ? DarkTheme : DefaultTheme}>
+    <ThemeProvider value={DefaultTheme}>
       <GestureHandlerRootView style={{ flex: 1 }}>
         <SafeAreaProvider>
           <AuthProvider>
             <QueryClientProvider client={queryClient}>
               <CombinedWorkoutDataProvider>
-                <PaperProvider>
-                  <UserInactivityProvider>
-                    <RootLayout />
-                  </UserInactivityProvider>
-                </PaperProvider>
+                {/* <UserInactivityProvider> */}
+                <RootLayout />
+                {/* </UserInactivityProvider> */}
               </CombinedWorkoutDataProvider>
             </QueryClientProvider>
           </AuthProvider>

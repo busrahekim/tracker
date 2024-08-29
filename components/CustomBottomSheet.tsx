@@ -19,15 +19,34 @@ const CustomBottomSheet = forwardRef<BottomSheet, CustomBottomSheetProps>(
     const { saveWorkoutData } = useSaveWorkoutData();
 
     const handleFinish = async () => {
-      const currentDate = new Date().toISOString().split("T")[0];
-      try {
-        await saveWorkoutData(currentDate, currentWorkout);
-        await refetchUserData();
-        onClose();
-      } catch (error) {
-        Alert.alert("Error", "Failed to save workout data. Please try again.");
-        console.error(error);
-      }
+      Alert.alert(
+        "Confirm Finish", 
+        "Are you sure you want to finish this workout?", 
+        [
+          {
+            text: "No",
+            style: "cancel",
+          },
+          {
+            text: "Yes",
+            onPress: async () => {
+              const currentDate = new Date().toISOString().split("T")[0];
+              try {
+                await saveWorkoutData(currentDate, currentWorkout);
+                await refetchUserData();
+                onClose();
+              } catch (error) {
+                Alert.alert(
+                  "Error",
+                  "Failed to save workout data. Please try again."
+                );
+                console.error(error);
+              }
+            },
+          },
+        ],
+        { cancelable: false } 
+      );
     };
 
     return (

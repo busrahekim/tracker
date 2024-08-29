@@ -1,18 +1,17 @@
 import React, { useState, useEffect } from "react";
 import {
   Alert,
+  Modal,
   ScrollView,
   Text,
   TextInput,
   TouchableOpacity,
   View,
 } from "react-native";
-import { Dialog, Portal, Button as PaperButton } from "react-native-paper";
 import { SetData } from "@/constants/Interfaces";
 import { useCombinedWorkoutData } from "@/context/CombinedWorkoutDataContext";
 import { AntDesign } from "@expo/vector-icons";
 import Colors from "@/constants/Colors";
-
 
 interface AddDataDialogPanelProps {
   visible: boolean;
@@ -93,24 +92,33 @@ const AddDataDialogPanel: React.FC<AddDataDialogPanelProps> = ({
   };
 
   return (
-    <Portal>
-      <Dialog
-        visible={visible}
-        onDismiss={onClose}
-        style={{ maxHeight: "80%", backgroundColor: "white" }}
+    <Modal visible={visible} transparent={true} animationType="slide">
+      <View
+        className="flex-1 justify-center items-center"
+        style={{
+          backgroundColor: "rgba(0, 0, 0, 0.5)",
+        }}
       >
-        <Dialog.Title>{`Add Data for ${workoutDay} Day`}</Dialog.Title>
-        <Dialog.ScrollArea>
-          <ScrollView contentContainerStyle={{ paddingHorizontal: 24 }}>
+        <View
+          className="bg-background rounded-md p-5"
+          style={{
+            width: "90%",
+            maxHeight: "80%",
+          }}
+        >
+          <Text className="text-lg font-bold mb-2">
+            Add Data for {workoutDay} Day
+          </Text>
+          <ScrollView contentContainerStyle={{ paddingHorizontal: 16 }}>
             {Object.entries(exerciseData).map(([exercise, sets], index) => (
               <View key={index}>
-                <Text className="font-semibold text-lg text-primary mt-2">
+                <Text className="text-lg font-semibold text-primary mt-2">
                   {exercise}
                 </Text>
                 {sets.map((set, setIndex) => (
                   <View
                     key={setIndex}
-                    className="flex flex-row items-center mb-2 gap-x-2"
+                    className="flex-row items-center mb-2 gap-x-2"
                   >
                     <Text className="flex-1 font-semibold">{`Set ${
                       setIndex + 1
@@ -123,6 +131,7 @@ const AddDataDialogPanel: React.FC<AddDataDialogPanelProps> = ({
                         updateSet(exercise, setIndex, "kg", text)
                       }
                       keyboardType="numeric"
+                      placeholderTextColor={Colors.primary}
                     />
                     <TextInput
                       className="flex-1 bg-lightGray rounded p-1"
@@ -132,8 +141,11 @@ const AddDataDialogPanel: React.FC<AddDataDialogPanelProps> = ({
                         updateSet(exercise, setIndex, "rep", text)
                       }
                       keyboardType="numeric"
+                      placeholderTextColor={Colors.primary}
                     />
-                    <TouchableOpacity onPress={() => handleDeleteSet(exercise, setIndex)}>
+                    <TouchableOpacity
+                      onPress={() => handleDeleteSet(exercise, setIndex)}
+                    >
                       <AntDesign
                         name="delete"
                         size={18}
@@ -148,13 +160,17 @@ const AddDataDialogPanel: React.FC<AddDataDialogPanelProps> = ({
               </View>
             ))}
           </ScrollView>
-        </Dialog.ScrollArea>
-        <Dialog.Actions>
-          <PaperButton onPress={onClose}>Cancel</PaperButton>
-          <PaperButton onPress={handleSave}>Save</PaperButton>
-        </Dialog.Actions>
-      </Dialog>
-    </Portal>
+          <View className="flex-row justify-end gap-x-2">
+            <TouchableOpacity onPress={onClose}>
+              <Text className="font-semibold">Cancel</Text>
+            </TouchableOpacity>
+            <TouchableOpacity onPress={handleSave}>
+              <Text className="font-semibold text-green-500">Save</Text>
+            </TouchableOpacity>
+          </View>
+        </View>
+      </View>
+    </Modal>
   );
 };
 

@@ -1,32 +1,25 @@
 import React from "react";
 import { Tabs } from "expo-router";
-import {
-  View,
-} from "react-native";
+import { Platform, TouchableOpacity, View, Text } from "react-native";
 import Colors from "@/constants/Colors";
 import { Fontisto, Ionicons, MaterialCommunityIcons } from "@expo/vector-icons";
 import TabHeader from "@/components/TabHeader";
+import { SafeAreaView } from "react-native-safe-area-context";
 
 export default function TabLayout() {
   return (
-    <View style={{ flex: 1 }}>
+    <SafeAreaView style={{ flex: 1 }} edges={["bottom"]}>
       <Tabs
         screenOptions={{
           tabBarStyle: {
             backgroundColor: Colors.lightGray,
-            position: "absolute",
-            bottom: 10,
-            justifyContent: "center",
-            alignSelf: "center",
-            height: 60,
+            paddingVertical: Platform.OS === "ios" ? 20 : 10,
+            height: 70,
             marginHorizontal: 10,
-            padding: 2,
+            paddingHorizontal: 2,
             borderRadius: 10,
-
-            // backgroundColor: Colors.lightGray,
-            // height: 60,
-            // padding: 2,
-            // borderRadius: 10,
+            alignItems: "center",
+            justifyContent: "center",
           },
           tabBarShowLabel: false,
           tabBarInactiveTintColor: Colors.gray,
@@ -41,27 +34,18 @@ export default function TabLayout() {
             title: "Track",
             tabBarIcon: ({ size, color, focused }) => (
               <View
-                className={`p-3  ${focused ? "bg-primary rounded-full" : ""}`}
+                style={{
+                  height: 45,
+                  width: 45,
+                  backgroundColor: focused ? Colors.primary : "",
+                  borderRadius: 25,
+                  alignItems: "center",
+                  justifyContent: "center",
+                }}
               >
                 <Fontisto name="date" size={size} color={color} />
               </View>
             ),
-            // headerRight: () => (
-            //   <Link href="/modal" asChild>
-            //     <Pressable>
-            //       {({ pressed }) => (
-            //         <FontAwesome
-            //           name="info-circle"
-            //           size={25}
-            //           color={Colors.dark}
-            //           style={{ marginRight: 15, opacity: pressed ? 0.5 : 1 }}
-            //         />
-            //       )}
-            //     </Pressable>
-            //   </Link>
-            // ),
-            // headerTransparent: true,
-            // header: () => <HomeTabHeader />,
           }}
         />
         <Tabs.Screen
@@ -70,7 +54,14 @@ export default function TabLayout() {
             title: "",
             tabBarIcon: ({ size, color, focused }) => (
               <View
-                className={`p-3 ${focused ? "bg-primary  rounded-full" : ""}`}
+                style={{
+                  height: 45,
+                  width: 45,
+                  backgroundColor: focused ? Colors.primary : "",
+                  borderRadius: 25,
+                  alignItems: "center",
+                  justifyContent: "center",
+                }}
               >
                 <MaterialCommunityIcons
                   name="eight-track"
@@ -79,8 +70,6 @@ export default function TabLayout() {
                 />
               </View>
             ),
-            // headerTransparent: true,
-            // header: () => <HomeTabHeader />,
           }}
         />
         <Tabs.Screen
@@ -89,7 +78,14 @@ export default function TabLayout() {
             title: "",
             tabBarIcon: ({ size, color, focused }) => (
               <View
-                className={`p-3 ${focused ? "bg-primary rounded-full" : ""}`}
+                style={{
+                  height: 45,
+                  width: 45,
+                  backgroundColor: focused ? Colors.primary : "",
+                  borderRadius: 25,
+                  alignItems: "center",
+                  justifyContent: "center",
+                }}
               >
                 <MaterialCommunityIcons
                   name="food-apple-outline"
@@ -115,6 +111,6 @@ export default function TabLayout() {
           }}
         />
       </Tabs>
-    </View>
+    </SafeAreaView>
   );
 }

@@ -1,8 +1,15 @@
 import Colors from "@/constants/Colors";
 import { AntDesign } from "@expo/vector-icons";
 import React, { useEffect, useState } from "react";
-import { Alert, ScrollView, TouchableOpacity, View } from "react-native";
-import { Modal, Portal, Button, TextInput, List } from "react-native-paper";
+import {
+  Alert,
+  ScrollView,
+  Text,
+  TextInput,
+  TouchableOpacity,
+  View,
+  Modal,
+} from "react-native";
 
 interface WorkoutEditPanelProps {
   visible: boolean;
@@ -59,71 +66,69 @@ const WorkoutEditPanel: React.FC<WorkoutEditPanelProps> = ({
   };
 
   return (
-    <Portal>
-      <Modal
-        visible={visible}
-        onDismiss={onClose}
-        contentContainerStyle={{
-          backgroundColor: "white",
-          padding: 15,
-          margin: 20,
-          borderRadius: 10,
+    <Modal visible={visible} transparent={true} animationType="slide">
+      <View
+        className="flex-1 justify-center items-center"
+        style={{
+          backgroundColor: "rgba(0, 0, 0, 0.5)",
         }}
       >
-        <ScrollView>
-          <TextInput
-            label="Workout Name"
-            value={workout}
-            onChangeText={setWorkout}
-            className="mb-2 bg-lightGray"
-            disabled
-          />
+        <View
+          className="bg-background rounded-md p-5"
+          style={{
+            width: "90%",
+          }}
+        >
+          <Text className="text-lg font-bold mb-2">
+            Workout Name: {workout}
+          </Text>
 
-          <List.Section>
-            <List.Subheader className="text-lg font-bold">
-              Exercises
-            </List.Subheader>
+          <Text className="text-lg font-bold mb-2">Exercises</Text>
+          <ScrollView contentContainerStyle={{ paddingHorizontal: 16 }}>
             {exercises.map((exercise, index) => (
               <View key={index} className="flex-row items-center mb-2">
                 <TextInput
                   key={index}
-                  label={`Exercise ${index + 1}`}
+                  placeholder={`Exercise ${index + 1}`}
                   value={exercise}
                   onChangeText={(text) =>
                     setExercises((prev) =>
                       prev.map((ex, i) => (i === index ? text : ex))
                     )
                   }
-                  className="flex-1 bg-lightGray"
+                  className="flex-1 rounded p-2 bg-lightGray"
+                  placeholderTextColor={Colors.primary}
                 />
                 <TouchableOpacity
                   onPress={() => handleDeleteExercise(index)}
                   className="ml-2"
                 >
-                  <AntDesign name="delete" size={24} color={Colors.primary} />
+                  <AntDesign name="delete" size={20} color={Colors.primary} />
                 </TouchableOpacity>
               </View>
             ))}
-            <Button
-              icon="plus"
-              mode="contained"
+            <TouchableOpacity
               onPress={handleAddExercise}
-              className="mt-2 bg-primary"
+              className="mt-2 p-2 rounded bg-primary items-center justify-center"
             >
-              Add Exercise
-            </Button>
-          </List.Section>
+              <Text className="text-background"> + Add Exercise</Text>
+            </TouchableOpacity>
+          </ScrollView>
 
-          <Button
-            mode="contained"
-            onPress={handleSave}
-            className="mt-2 bg-secondary"
-          >
-            Save Changes
-          </Button>
-        </ScrollView>
-      </Modal>
-    </Portal>
+          <View className="flex-row justify-end mt-4">
+            <TouchableOpacity onPress={onClose} className="p-2 rounded">
+              <Text className="font-semibold">Cancel</Text>
+            </TouchableOpacity>
+            <TouchableOpacity
+              onPress={handleSave}
+              className="p-2 ml-2 rounded bg-secondary"
+            >
+              <Text className="text-white font-semibold">Save Changes</Text>
+            </TouchableOpacity>
+          </View>
+        </View>
+      </View>
+    </Modal>
   );
 };
 

@@ -89,11 +89,11 @@ const Protein = () => {
       </View>
 
       {!isPremium && (
-        <View className="w-full h-full justify-center">
+        <View className="w-screen h-screen justify-center">
           <BlurView intensity={100} tint="light">
-            <View className="w-full h-full justify-center items-center">
+            <View className="w-screen h-screen justify-center items-center">
               <TouchableOpacity
-                className="rounded bg-primary w-full justify-center items-center"
+                className="rounded bg-primary p-5 justify-center items-center"
                 onPress={handleOpenPaywall}
               >
                 <Text className="text-lg text-white">Get Premium for $5</Text>

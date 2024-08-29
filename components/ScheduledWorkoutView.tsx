@@ -23,22 +23,30 @@ const ScheduledWorkoutView = ({ showModal }: ScheduledWorkoutViewProps) => {
   const today = new Date().toISOString().split("T")[0];
 
   // Retrieve today's schedule entry from userDoc.schedule
-  const todaySchedule = userDoc.schedule ? userDoc.schedule[today] : undefined;
+  const todaySchedule = userDoc?.schedule
+    ? userDoc?.schedule[today]
+    : undefined;
 
   // Get today's workout status
   const workoutStatus = todaySchedule ? todaySchedule.status : undefined;
 
   return (
-    <View className="flex-1 mt-2">
-      <View className="flex-1 bg-primary rounded-md items-center my-2 p-4">
+    <View className="flex-1 mt-2 min-h-[150px]">
+      <View className="flex-1 bg-primary rounded-md items-center my-2 p-4 ">
         <View className="flex-row items-center justify-between w-full gap-2">
           <Text className="text-white text-xl">{currentWorkout} Day</Text>
           <TouchableOpacity
             onPress={showModal}
-            className={`rounded-full px-3 py-2 ${workoutStatus === "done" ? "bg-secondary" : "bg-lightGray"}`}
+            className={`rounded-full px-3 py-2 ${
+              workoutStatus === "done" ? "bg-secondary" : "bg-lightGray"
+            }`}
             disabled={workoutStatus === "done"}
           >
-            <Text className={` uppercase ${workoutStatus === "done" ? "text-white" : "text-primary"}`}>
+            <Text
+              className={` uppercase ${
+                workoutStatus === "done" ? "text-white" : "text-primary"
+              }`}
+            >
               {workoutStatus === "done" ? "Done" : "Start"}
             </Text>
           </TouchableOpacity>
