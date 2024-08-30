@@ -37,6 +37,9 @@ export default function Home() {
 
     const scheduleNotification = async () => {
       if (currentWorkout !== "Off") {
+        // Cancel all existing scheduled notifications to avoid duplicates
+        await Notifications.cancelAllScheduledNotificationsAsync();
+
         await Notifications.scheduleNotificationAsync({
           content: {
             title: "Workout Reminder",
@@ -86,7 +89,6 @@ export default function Home() {
       const userDoc = await getDoc(userDocRef);
       const schedule = userDoc.data()?.schedule || {};
 
-      
       const today = new Date().toISOString().split("T")[0];
       const newSchedule = { ...schedule };
 
